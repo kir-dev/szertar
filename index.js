@@ -13,7 +13,5 @@ process.on('uncaughtException', function(error) {
     }, 3000);
 });
 
-log = log(dal, config);
-
 var core = require("./modules/core");
 core.createCore(dal, config);
