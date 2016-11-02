@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var qs = require('querystring');
 
 module.exports = function (dal) {
 
@@ -13,9 +12,15 @@ module.exports = function (dal) {
     });
 
     router.post('/upload', function (req, res) {
-    	console.log(req.body.item);
-    	console.log(req.body.count);
-    	res.render("pages/showitem", {item: req.body.item, count: req.body.count})
+        var NAME = req.body.item;
+        var COUNT = req.body.count;
+
+        var newItem = new dal.model({ name: NAME, count: COUNT});
+        newItem.save(function (err, newItem) {
+            if (err) return console.error(err);
+        });
+
+    	res.render("pages/showitem", {item: NAME, count: COUNT});
         console.log("end handling post");
     }); 
 

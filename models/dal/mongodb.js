@@ -2,10 +2,15 @@ var models = require('../models');
 
 module.exports = function(config) {
     var mongoose = require('mongoose-q')();
+    var db = mongoose.connection;
 
-    mongoose.connection.on('error', function(error) {
+    db.on('error', function(error) {
         console.log("MongoDb threw an exception:" + error);
         throw error;
+    });
+
+    db.once('open', function () {
+        console.log("Connected to db.");
     });
 
     mongoose.connect(config.mongo.path, {
@@ -27,6 +32,6 @@ module.exports = function(config) {
 
     ret.mongoose = mongoose;
     ret.config = config;
-
+    ret.model = model;
     return ret;
 };

@@ -2,5 +2,5 @@
 var _items = require('./item');
 
 module.exports = function(mongoose) {
-	_items(mongoose);
+	return _items(mongoose);
 };

@@ -1,8 +1,6 @@
 var http = require('http');
 var express = require('express');
-var path = require('path');
 var app = express();
-var _ = require("lodash");
 var bodyparser = require("body-parser");
 var requestlogger = require("../middlewares/requestlogger");
 

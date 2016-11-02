@@ -1,5 +1,5 @@
 module.exports = function(mongoose) {
-    var Schema = new mongoose.Schema({
+    var schema = new mongoose.Schema({
         _id: {
             type: mongoose.Schema.Types.ObjectId,
             default: function() {
@@ -14,7 +14,7 @@ module.exports = function(mongoose) {
         }
     });
 
-    var Model = mongoose.model('Item', Schema);
+    var Model = mongoose.model('Item', schema);
 
     return Model;
 };
