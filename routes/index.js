@@ -15,14 +15,30 @@ module.exports = function (dal) {
         var NAME = req.body.item;
         var COUNT = req.body.count;
 
-        var newItem = new dal.model({ name: NAME, count: COUNT});
-        newItem.save(function (err, newItem) {
-            if (err) return console.error(err);
+        var Item = dal.model;
+        Item.findOne({name: NAME}, function (err, item) {
+            if (err) return console.log(err);
+            if (item == null) {
+                saveNewItem(NAME, COUNT);
+                return;
+            }
+
+            item.count += parseInt(COUNT, 10);
+            item.save(printError);
         });
 
     	res.render("pages/showitem", {item: NAME, count: COUNT});
         console.log("end handling post");
-    }); 
+    });
 
     return router;
+};
+
+function saveNewItem(NAME, COUNT) {
+    var newItem = new dal.model({ name: NAME, count: COUNT});
+    newItem.save(printError);
+}
+
+function printError(err) {
+    if (err) return console.log(err);
 }
