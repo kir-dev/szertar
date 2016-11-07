@@ -1,38 +1,59 @@
 <!doctype html>
-<html>
-<head> 
-	<meta charset="UTF-8">
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Feltöltés</title>
+    <title>Feltöltés</title>
 </head>
-<body> 
-	<h1>Feltöltés</h1>
-	<form method="post" action="/upload">
-		<fieldset>
-		<legend>Alap adatok</legend>
-		<label>Tárgy: </label>
-		<select name="item" autofocus onchange="changed()" id="dropdown">
-			<option value="football">Focilabda</option>
-			<option value="basketball">Kosárlabda</option>
-			<option value="newItem">Új hozzáadása</option>
-		</select>
-		<br/>
-		<label>Elemszám: </label>
-		<input name="count" type="text" value="1" required>
-		<br/>
-		<input type="submit" value="Feltöltés!">
-	</form>
+<body onload="init()">
+<h1>Feltöltés</h1>
+<form method="post" action="/upload">
+    <fieldset>
+        <legend>Alap adatok</legend>
+        <label>Tárgy: </label>
+        <select name="item" id="dropdown" onchange="changed()" autofocus>
+            <option value="football">Focilabda</option>
+            <option value="basketball">Kosárlabda</option>
+            <option value="newItem">Új hozzáadása</option>
+        </select>
+        <div id="newItemInputDiv"></div>
+        <br/>
+        <label>Elemszám: </label>
+        <input name="count" type="text" value="1" placeholder="Darabszám" required>
+        <br/>
+        <input type="submit" value="Feltöltés!">
+</form>
 
-	<script type="text/javascript">
-		function changed() {
-			console.log("inChanged");
-			var element = document.getElementById("dropdown");
-			console.log("element found value is " + element.value);
-			if (element.value === "newItem") {			
-				console.log("ok");
-			}
-			console.log("changed ends");
-		}
-	</script>
+<script>
+    function init() {
+
+    }
+
+    function addNewItem() {
+        var inputDiv = document.getElementById("newItemInputDiv");
+        var inputField = document.createElement("INPUT");
+        inputField.setAttribute("type", "text");
+        inputField.placeholder = "Új tárgy neve";
+        inputField.required = true;
+        inputField.name = "newItem";
+        inputDiv.appendChild(inputField);
+    }
+
+    function changed() {
+        var dropdown = document.getElementById("dropdown");
+        if (dropdown.value === "newItem") {
+            addNewItem();
+        } else {
+            clearDiv();
+        }
+    }
+
+    function clearDiv() {
+        var div = document.getElementById("newItemInputDiv");
+        while (div.firstChild) {
+            div.removeChild(div.firstChild);
+        }
+    }
+</script>
 </body>
 </html>

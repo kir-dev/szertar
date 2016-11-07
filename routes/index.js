@@ -13,6 +13,11 @@ module.exports = function (dal) {
 
     router.post('/upload', function (req, res) {
         var NAME = req.body.item;
+        if (NAME === "newItem") {
+            NAME = req.body.newItem;
+            if (NAME == null)
+                return console.log("No new Item specified.");
+        }
         var COUNT = req.body.count;
 
         var Item = dal.model;
@@ -28,7 +33,6 @@ module.exports = function (dal) {
         });
 
     	res.render("pages/showitem", {item: NAME, count: COUNT});
-        console.log("end handling post");
     });
 
     return router;
