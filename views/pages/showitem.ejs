@@ -1,12 +1,20 @@
 <html>
 <head>
-	<title>Feltöltés sikeres</title>
+    <title>Feltöltés sikeres</title>
 </head>
 <body>
-	<%= item %>
-	<br/>
-	<%= count %>
-	<br/>
-	<a href="upload">upload</a>
+Sikeres feltöltés: <%= item %>: <%= count %>
+<br/>
+
+<br/>
+<a href="upload">vissza</a>
+<a href="/">vissza a főoldalra</a>
+
+<script>
+    window.onload = function () {
+        console.log("hi");
+        console.log(items);
+    }
+</script>
 </body>
 </html>
