@@ -3,8 +3,17 @@
     <title>Feltöltés sikeres</title>
 </head>
 <body>
-Sikeres feltöltés: <%= item %>: <%= count %>
+<h1> Sikeres feltöltés: <%= count %> <%= item %> </h1>
 <br/>
+<h2>Szertár elemei:</h2>
+<table>
+    <% for(var i=0; i < items.length; i++) { %>
+    <tr>
+        <td><%= items[i].name %></td>
+        <td><%= items[i].count %></td>
+    </tr>
+    <% } %>
+</table>
 
 <br/>
 <a href="upload">vissza</a>
@@ -13,7 +22,6 @@ Sikeres feltöltés: <%= item %>: <%= count %>
 <script>
     window.onload = function () {
         console.log("hi");
-        console.log(items);
     }
 </script>
 </body>

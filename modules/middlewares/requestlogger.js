@@ -3,4 +3,4 @@ exports.logrequest = function(conf) {
         console.log((new Date()).toISOString() + "\t" + req.method + "\t" + req.url);
         next();
     };
-}
+};

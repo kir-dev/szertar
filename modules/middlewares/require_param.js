@@ -6,4 +6,4 @@ module.exports = function(param_name) {
             res.sendError("Missing parameter");
         }
     };
-}
+};
