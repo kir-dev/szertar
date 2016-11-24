@@ -1,6 +1,5 @@
 module.exports = function (dal) {
     return  function (req, res, next) {
-        console.log("adding item to db, add_item");
         var name = req.body.item;
         if (name === "newItem") {
             name = req.body.newItem;
@@ -13,25 +12,18 @@ module.exports = function (dal) {
         var Item = dal.model;
         Item.findOne({name: name}, function (err, item) {
             if (err) return console.log(err);
+            var newItem;
             if (item == null) {
-                saveNewItem(name, count);
+                newItem = new dal.model({ name: NAME, count: COUNT});
             } else {
                 item.count += parseInt(count, 10);
-                item.save(printError);
+                newItem = item;
             }
+            newItem.save(function (err) {
+                if (err) return console.log(err);
+                req.count = count;
+                next();
+            });
         });
-
-        req.count = count;
-
-        next();
     };
 };
-
-function saveNewItem(NAME, COUNT) {
-    var newItem = new dal.model({ name: NAME, count: COUNT});
-    newItem.save(printError);
-}
-
-function printError(err) {
-    if (err) return console.log(err);
-}
