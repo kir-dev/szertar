@@ -3,8 +3,6 @@ var express = require('express');
 var app = express();
 var bodyparser = require("body-parser");
 var requestlogger = require("../middlewares/requestlogger");
-var add_item = require("../middlewares/add_item");
-var query_items = require("../middlewares/query_items");
 
 var _index = require("../../routes/index");
 
@@ -20,8 +18,6 @@ exports.createCore = function(dal, config) {
     //app.use(bodyparser.json());
     app.set('view engine', 'ejs');
     app.use(bodyparser.urlencoded({extended: true}));
-    app.use('/showitem', add_item(dal));
-    app.use('/', query_items(dal));
     app.use('/', _index(dal));
 
     http.createServer(app).listen(app.get('port'), function() {
