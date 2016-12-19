@@ -4,7 +4,7 @@ var router = express.Router();
 
 module.exports = function (dal) {
 
-    router.get('/', listItemsMain);
+    router.get('/', listItems);
 
     router.post('/', addItem);
 
@@ -40,15 +40,6 @@ function addItem (req, res) {
 }
 
 function listItems (req, res) {
-    var Item = dal.model;
-    Item.find({}, function (err, items) {
-        if (err) return console.log(err);
-        req.items = items;
-        renderMain(req, res);
-    });
-}
-
-function listItemsMain (req, res) {
     var Item = dal.model;
     Item.find({}, function (err, items) {
         if (err) return console.log(err);
