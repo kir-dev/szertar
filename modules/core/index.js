@@ -21,7 +21,7 @@ exports.createCore = function(dal, config) {
     app.set('view engine', 'ejs');
     app.use(bodyparser.urlencoded({extended: true}));
     app.use('/showitem', add_item(dal));
-    app.use('/showitem', query_items(dal));
+    app.use('/', query_items(dal));
     app.use('/', _index(dal));
 
     http.createServer(app).listen(app.get('port'), function() {

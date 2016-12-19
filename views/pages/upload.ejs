@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Feltöltés</title>
+    <title>SCH Szeretár</title>
 </head>
 <body onload="init()">
-<h1>Feltöltés</h1>
+<h1>SCH szertár</h1>
+<h2>Feltöltés</h2>
 <form method="post" action="/showitem">
     <fieldset>
         <legend>Alap adatok</legend>
@@ -24,6 +25,16 @@
         <input type="submit" value="Feltöltés!">
     </fieldset>
 </form>
+
+<h2>A szertár elemei</h2>
+<table>
+    <% for(var i=0; i < items.length; i++) { %>
+    <tr>
+        <td><%= items[i].name %></td>
+        <td><%= items[i].count %></td>
+    </tr>
+    <% } %>
+</table>
 
 <script>
     function init() {

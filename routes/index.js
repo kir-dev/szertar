@@ -5,11 +5,7 @@ var router = express.Router();
 module.exports = function (dal) {
 
     router.get('/', function (req, res) {
-        res.render("pages/index", {testData: "salierri"});
-    });
-
-    router.get('/upload', function (req, res) {
-    	res.render("pages/upload");
+        res.render("pages/upload", {items: req.items});
     });
 
     router.post('/showitem', function (req, res) {
