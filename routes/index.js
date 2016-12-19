@@ -6,17 +6,10 @@ module.exports = function (dal) {
 
     router.get('/', listItemsMain);
 
-    router.post('/showitem', addItem);
+    router.post('/', addItem);
 
     return router;
 };
-
-function renderMain (req, res) {
-    var name = req.itemName;
-    var count = req.count;
-    var items = req.items;
-    res.render("pages/showitem", {item: name, count: count, items: items});
-}
 
 function addItem (req, res) {
     var name = req.body.item;
@@ -60,10 +53,14 @@ function listItemsMain (req, res) {
     Item.find({}, function (err, items) {
         if (err) return console.log(err);
         req.items = items;
-        renderUpload(req, res);
+        renderMain(req, res);
     });
 }
 
-function renderUpload(req, res) {
-    res.render("pages/upload", {items: req.items});
+function renderMain(req, res) {
+    res.render("pages/main", {
+        item: req.itemName,
+        count: req.count,
+        items: req.items
+    });
 }

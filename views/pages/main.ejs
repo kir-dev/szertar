@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SCH Szeretár</title>
 </head>
-<body onload="init()">
+<body>
+<% if (item != undefined) { %>
+    <h3> Sikeres feltöltés: <%= count %> <%= item %> </h3>
+<% } %>
 <h1>SCH szertár</h1>
 <h2>Feltöltés</h2>
-<form method="post" action="/showitem">
+<form method="post" action="/">
     <fieldset>
         <legend>Alap adatok</legend>
         <label>Tárgy: </label>
@@ -37,10 +40,6 @@
 </table>
 
 <script>
-    function init() {
-
-    }
-
     function addNewItem() {
         var inputDiv = document.getElementById("newItemInputDiv");
         var inputField = document.createElement("INPUT");
