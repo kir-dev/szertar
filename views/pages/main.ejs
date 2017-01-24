@@ -6,8 +6,8 @@
     <title>SCH Szeretár</title>
 </head>
 <body>
-<% if (item != undefined) { %>
-    <h3> Sikeres feltöltés: <%= count %> <%= item %> </h3>
+<% if (message != undefined) { %>
+    <h3> <%= message %> </h3>
 <% } %>
 <h1>SCH szertár</h1>
 <h2>Feltöltés</h2>
@@ -18,6 +18,25 @@
         <select name="item" id="dropdown" onchange="changed()" autofocus>
             <% for(var i=0; i < items.length; i++) { %>
                 <option value="<%= items[i].name %>"><%= items[i].name %></option>
+            <% } %>
+            <option value="newItem">Új hozzáadása</option>
+        </select>
+        <div id="newItemInputDiv"></div>
+        <br/>
+        <label>Elemszám: </label>
+        <input name="count" type="text" value="1" placeholder="Darabszám" required>
+        <br/>
+        <input type="submit" value="Feltöltés!">
+    </fieldset>
+</form>
+<h2>Törlés</h2>
+<form method="post" action="/delete">
+    <fieldset>
+        <legend>Alap adatok</legend>
+        <label>Tárgy: </label>
+        <select name="item" id="dropdown" onchange="changed()" autofocus>
+            <% for(var i=0; i < items.length; i++) { %>
+            <option value="<%= items[i].name %>"><%= items[i].name %></option>
             <% } %>
             <option value="newItem">Új hozzáadása</option>
         </select>

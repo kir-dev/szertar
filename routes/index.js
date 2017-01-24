@@ -8,17 +8,18 @@ module.exports = function (dal) {
 
     router.post('/', addItem);
 
+    router.post('/delete', removeItem);
+
     return router;
 };
 
-function addItem (req, res) {
+function addItem(req, res) {
     var name = req.body.item;
     if (name === "newItem") {
         name = req.body.newItem;
         if (name == null)
             return console.log("No new Item specified.");
     }
-    req.itemName = name;
     var count = req.body.count;
 
     var Item = dal.model;
@@ -33,13 +34,32 @@ function addItem (req, res) {
         }
         newItem.save(function (err) {
             if (err) return console.log(err);
-            req.count = count;
+            req.message = "Sikeres feltöltés: " + count + " " + name + "!";
             listItems(req, res);
         });
     });
 }
 
-function listItems (req, res) {
+function removeItem(req, res) {
+    var name = req.body.item;
+    var count = parseInt(req.body.count, 10);
+    var Item = dal.model;
+    Item.findOne({name: name}, function (err, item) {
+        if (err || item == null) return console.log(err);
+        if (count > item.count) {
+            req.message = "Nincs ennyi " + name + " a szertárban!";
+            return listItems(req, res);
+        }
+        item.count -= count;
+        item.save(function(err) {
+           if (err) return console.log(err);
+           req.message = "Sikeres törlés: " + count + " " + name + "!";
+           listItems(req, res);
+        });
+    });
+}
+
+function listItems(req, res) {
     var Item = dal.model;
     Item.find({}, function (err, items) {
         if (err) return console.log(err);
@@ -50,8 +70,7 @@ function listItems (req, res) {
 
 function renderMain(req, res) {
     res.render("pages/main", {
-        item: req.itemName,
-        count: req.count,
+        message: req.message,
         items: req.items
     });
 }
