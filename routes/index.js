@@ -27,7 +27,7 @@ function addItem(req, res) {
         if (err) return console.log(err);
         var newItem;
         if (item == null) {
-            newItem = new dal.model({ name: NAME, count: COUNT});
+            newItem = new dal.model({ name: name, count: count});
         } else {
             item.count += parseInt(count, 10);
             newItem = item;
