@@ -16,8 +16,9 @@
         <legend>Alap adatok</legend>
         <label>Tárgy: </label>
         <select name="item" id="dropdown" onchange="changed()" autofocus>
-            <option value="football">Focilabda</option>
-            <option value="basketball">Kosárlabda</option>
+            <% for(var i=0; i < items.length; i++) { %>
+                <option value="<%= items[i].name %>"><%= items[i].name %></option>
+            <% } %>
             <option value="newItem">Új hozzáadása</option>
         </select>
         <div id="newItemInputDiv"></div>
@@ -40,6 +41,15 @@
 </table>
 
 <script>
+    function changed() {
+        var dropdown = document.getElementById("dropdown");
+        if (dropdown.value === "newItem") {
+            addNewItem();
+        } else {
+            clearDiv();
+        }
+    }
+
     function addNewItem() {
         var inputDiv = document.getElementById("newItemInputDiv");
         var inputField = document.createElement("INPUT");
@@ -48,15 +58,6 @@
         inputField.required = true;
         inputField.name = "newItem";
         inputDiv.appendChild(inputField);
-    }
-
-    function changed() {
-        var dropdown = document.getElementById("dropdown");
-        if (dropdown.value === "newItem") {
-            addNewItem();
-        } else {
-            clearDiv();
-        }
     }
 
     function clearDiv() {
