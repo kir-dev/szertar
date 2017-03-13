@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SCH Szeretár</title>
+    <title>SCH Szeretár: Főoldal</title>
 </head>
 <body>
-<% if (message != undefined) { %>
+<% if (message !== undefined) { %>
     <h3> <%= message %> </h3>
 <% } %>
 <h1>SCH szertár</h1>
 <h2>Feltöltés</h2>
-<form method="post" action="/">
+<form method="post" action="/main">
     <fieldset>
         <legend>Alap adatok</legend>
         <label>Tárgy: </label>
@@ -30,7 +30,7 @@
     </fieldset>
 </form>
 <h2>Törlés</h2>
-<form method="post" action="/delete">
+<form method="post" action="/main/delete">
     <fieldset>
         <legend>Alap adatok</legend>
         <label>Tárgy: </label>
