@@ -7,7 +7,7 @@ module.exports = function (dal) {
     //     }
     // );
 
-    router.use('/login',
+    router.use('/',
         function (req, res, next) {
             res.render("pages/login");
         }
