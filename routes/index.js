@@ -8,11 +8,13 @@ var listItemsMW = require('../modules/middlewares/item/listItems');
 
 module.exports = function (dal) {
 
-    router.get('/', listItemsMW(dal),
+    router.get('/', 
+        listItemsMW(dal),
         renderMainMW()
     );
 
-    router.post('/', addItemMW(dal),
+    router.post('/', 
+        addItemMW(dal),
         listItemsMW(dal),
         renderMainMW()
     );

@@ -12,15 +12,15 @@ exports.createCore = function(dal, config) {
     GLOBAL.config = config;
 
     app.set('port', config.port);
+    app.set('view engine', 'ejs');
 
     if(config.logrequests) {
         app.use(requestlogger.logrequest(config));
     }
-    //app.use(bodyparser.json());
-    app.set('view engine', 'ejs');
+    app.use(bodyparser.json());
     app.use(bodyparser.urlencoded({extended: true}));
     app.use('/', _login(dal));
-    app.use('/main', _index(dal));
+    app.use('/', _index(dal));
 
     http.createServer(app).listen(app.get('port'), function() {
         console.log("App started on port " + app.get('port'));
