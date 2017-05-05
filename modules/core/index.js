@@ -18,7 +18,7 @@ exports.createCore = function(dal, config) {
     app.use(express.static('public'));
     // add logger
     if(config.logrequests) {
-        app.use(requestlogger.logrequest(config));
+        app.use(requestlogger.logrequest());
     }
     app.use(bodyparser.json());
     app.use(bodyparser.urlencoded({extended: true}));
