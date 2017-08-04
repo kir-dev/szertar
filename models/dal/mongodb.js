@@ -12,7 +12,6 @@ module.exports = function(config) {
     db.once('open', function () {
         console.log("Connected to db.");
     });
-    mongoose.Promise = global.Promise;
     mongoose.connect(config.mongo.path, {
         db: {
             native_parser: true

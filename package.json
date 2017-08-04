@@ -4,7 +4,9 @@
   "release_date": "2016-10-13",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "cover": "istanbul cover ./node_modules/.bin/_mocha",
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "1.10.1",

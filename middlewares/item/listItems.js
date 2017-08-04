@@ -3,7 +3,7 @@ module.exports = function (dal) {
         var Item = dal.model;
         Item.find({}, function (err, items) {
             if (err) return console.log(err);
-            req.items = items;
+            res.tpl.items = items;
             next();
         });
     }
