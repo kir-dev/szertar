@@ -1,4 +1,5 @@
 # szertar
+[![Build Status](https://travis-ci.org/kir-dev/szertar.svg?branch=master)](https://travis-ci.org/kir-dev/szertar)
 
 # How to run
 
