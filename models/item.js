@@ -1,19 +1,13 @@
-module.exports = function(mongoose) {
-    var schema = new mongoose.Schema({
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: function() {
-                return new mongoose.Types.ObjectId();
-            }
-        },
-        name: {
-            type: String
-        },
-        count: {
-            type: Number
-        }
-    });
+var Schema = require('mongoose').Schema;
+var db = require('../config/db');
 
+var Item = db.model('Item', {
+    name: {
+        type: String
+    },
+    count: {
+        type: Number
+    }
+});
 
-    return mongoose.model('Item', schema);;
-};
+module.exports = Item;

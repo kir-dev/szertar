@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-module.exports = function (dal) {
+module.exports = function () {
 
     router.use('/',
         function (req, res, next) {

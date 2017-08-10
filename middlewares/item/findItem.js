@@ -1,7 +1,11 @@
-module.exports = function (dal) {
+var requireOption = require('../requireOption');
+
+module.exports = function (objectRepository) {
+
+    var itemModel = requireOption(objectRepository, 'itemModel');
+
     return function (req, res, next) {
-        var Item = dal.model;
-        Item.findOne({name: req.body.item}, function (err, item) {
+        itemModel.findOne({name: req.body.item}, function (err, item) {
             if (err) {
                 console.log(err);
                 return next();

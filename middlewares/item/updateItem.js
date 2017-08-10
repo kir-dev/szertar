@@ -1,4 +1,5 @@
-module.exports = function(dal) {
+module.exports = function () {
+
     return function (req, res, next) {
         var count = req.body.count;
         var item = req.item;

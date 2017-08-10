@@ -8,25 +8,32 @@ var findItemMW = require('../middlewares/item/findItem');
 var updateItemMW = require('../middlewares/item/updateItem');
 var saveItemMW = require('../middlewares/item/saveItem');
 
-module.exports = function (dal) {
+var itemModel = require('../models/item');
+
+module.exports = function () {
+
+    var objectRepository = {
+        itemModel: itemModel
+    };
+
 
     router.get('/', 
-        listItemsMW(dal),
+        listItemsMW(objectRepository),
         renderMainMW()
     );
 
     router.post('/', 
-        validateRequestItemMW(dal),
-        findItemMW(dal),
-        updateItemMW(dal),
-        saveItemMW(dal),
+        validateRequestItemMW(),
+        findItemMW(objectRepository),
+        updateItemMW(),
+        saveItemMW(),
         function(req, res, next) {
             res.redirect('/');
         }
     );
 
     router.post('/delete',
-        removeItemMW(dal),
+        removeItemMW(objectRepository),
         function(req, res, next) {
             res.redirect('/');
         }

@@ -1,11 +1,12 @@
-var config = require('./config');
-var data_access_layer = require('./models/dal/mongodb');
-var dal = new data_access_layer(config);
+var config = require('./config/config');
 var http = require('http');
 var express = require('express');
 var app = express();
 var bodyparser = require("body-parser");
 var requestlogger = require("./middlewares/generic/logRequest");
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var passport = require('passport');
+var passportOauth2 = require('passport-oauth2');
 
 var _main = require("./routes/main");
 var _login = require("./routes/login");
@@ -21,6 +22,16 @@ process.on('uncaughtException', function(error) {
 
 global.config = config;
 
+passport.use(new BearerStrategy(
+    function (token, done) {
+        User.findOne({ token: token }, function (err, user) {
+            if (err) { return done(err); }
+            if (!user) { return done(null, false); }
+            return done(null, user, { scope: 'read' });
+        });
+    }
+));
+
 app.set('port', config.port);
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -35,8 +46,8 @@ app.use(function (req, res, next) {
     return next();
 });
 
-app.use('/login', _login(dal));
-app.use('/', _main(dal));
+app.use('/login', _login());
+app.use('/', _main());
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("App started on port " + app.get('port'));
