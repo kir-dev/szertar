@@ -21,14 +21,14 @@ module.exports = function (dal) {
         updateItemMW(dal),
         saveItemMW(dal),
         function(req, res, next) {
-            res.redirect('/main');
+            res.redirect('/');
         }
     );
 
     router.post('/delete',
         removeItemMW(dal),
         function(req, res, next) {
-            res.redirect('/main');
+            res.redirect('/');
         }
     );
 

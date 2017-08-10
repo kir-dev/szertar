@@ -34,8 +34,9 @@ app.use(function (req, res, next) {
     res.tpl.error = {};
     return next();
 });
-app.use('/main', _main(dal));
-app.use('/', _login(dal));
+
+app.use('/login', _login(dal));
+app.use('/', _main(dal));
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("App started on port " + app.get('port'));
