@@ -16,7 +16,6 @@ module.exports = function () {
         itemModel: itemModel
     };
 
-
     router.get('/', 
         listItemsMW(objectRepository),
         renderMainMW()
@@ -25,7 +24,7 @@ module.exports = function () {
     router.post('/', 
         validateRequestItemMW(),
         findItemMW(objectRepository),
-        updateItemMW(),
+        updateItemMW(objectRepository),
         saveItemMW(),
         function(req, res, next) {
             res.redirect('/');
