@@ -5,8 +5,9 @@ var app = express();
 var bodyparser = require("body-parser");
 var requestlogger = require("./middlewares/generic/logRequest");
 var BearerStrategy = require('passport-http-bearer').Strategy;
-var passport = require('passport');
-var passportOauth2 = require('passport-oauth2');
+var session = require('express-session');
+var passport = require('passport'),
+    OAuth2Strategy = require('passport-oauth2');
 
 var _admin = require("./routes/main");
 var _login = require("./routes/login");
@@ -23,15 +24,43 @@ process.on('uncaughtException', function(error) {
 
 global.config = config;
 
-passport.use(new BearerStrategy(
-    function (token, done) {
-        User.findOne({ token: token }, function (err, user) {
-            if (err) { return done(err); }
-            if (!user) { return done(null, false); }
-            return done(null, user, { scope: 'read' });
+app.use(session({
+    secret: config.sessionSecret,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {secure: true}
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new OAuth2Strategy({
+        authorizationURL: config.oauth2.authorizationURL,
+        tokenURL: config.oauth2.tokenURL,
+        clientID: config.oauth2.id,
+        clientSecret: config.oauth2.key,
+        callbackURL: config.oauth2.callbackURL,
+        scope: config.oauth2.scope
+    },
+    function (accessToken, refreshToken, profile, cb) {
+        console.log(accessToken + '\n' + refreshToken + '\n' + JSON.stringify
+            (profile));
+        var request = require('request');
+        request('https://auth.sch.bme.hu/api/profile?access_token=' + accessToken, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                return cb(null, JSON.parse(body), null);
+            } else {
+                return cb(new Error('hello'));
+            }
         });
-    }
-));
+    }));
+
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
 
 app.set('port', config.port);
 app.set('view engine', 'ejs');
@@ -50,6 +79,37 @@ app.use(function (req, res, next) {
 app.use('/login', _login());
 app.use('/', _admin());
 app.use('/item', _item());
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("App started on port " + app.get('port'));
