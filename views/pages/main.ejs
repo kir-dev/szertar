@@ -2,53 +2,64 @@
 <% if (message !== undefined) { %>
     <h3> <%= message %> </h3>
 <% } %>
-<h1>SCH szertár</h1>
-<h2>Feltöltés</h2>
-<form method="post" action="/">
-    <fieldset>
-        <legend>Alap adatok</legend>
-        <label>Tárgy: </label>
-        <select name="item" id="dropdown" onchange="changed()" autofocus>
-            <% for(var i=0; i < items.length; i++) { %>
-                <option value="<%= items[i].name %>"><%= items[i].name %></option>
-            <% } %>
-            <option value="newItem">Új hozzáadása</option>
-        </select>
-        <div id="newItemInputDiv"></div>
-        <br/>
-        <label>Elemszám: </label>
-        <input name="count" type="text" value="1" placeholder="Darabszám" required>
-        <br/>
-        <input type="submit" value="Feltöltés!">
-    </fieldset>
-</form>
-<h2>Törlés</h2>
-<form method="post" action="/delete">
-    <fieldset>
-        <legend>Alap adatok</legend>
-        <label>Tárgy: </label>
-        <select name="item" id="dropdown" onchange="changed()" autofocus>
-            <% for(var i=0; i < items.length; i++) { %>
-            <option value="<%= items[i].name %>"><%= items[i].name %></option>
-            <% } %>
-            <option value="newItem">Új hozzáadása</option>
-        </select>
-        <div id="newItemInputDiv"></div>
-        <br/>
-        <label>Elemszám: </label>
-        <input name="count" type="text" value="1" placeholder="Darabszám" required>
-        <br/>
-        <input type="submit" value="Feltöltés!">
-    </fieldset>
-</form>
-
-<h2>A szertár elemei</h2>
-<table>
-    <% for(var i=0; i < items.length; i++) { %>
-    <tr>
-        <td><%= items[i].name %></td>
-        <td><%= items[i].count %></td>
-    </tr>
-    <% } %>
-</table>
+<div class="container">
+    <h1>SCH szertár</h1>
+    <div class="row">
+        <div class="col-lg-5">
+            <h2>Feltöltés</h2>
+            <form method="post" action="/">
+                <fieldset>
+                    <legend>Alap adatok</legend>
+                    <label>Tárgy: </label>
+                    <select name="item" id="dropdown" onchange="changed()" autofocus>
+                        <% for(var i=0; i < items.length; i++) { %>
+                        <option value="<%= items[i].name %>"><%= items[i].name %></option>
+                        <% } %>
+                        <option value="newItem">Új hozzáadása</option>
+                    </select>
+                    <div id="newItemInputDiv"></div>
+                    <br/>
+                    <label>Elemszám: </label>
+                    <input name="count" type="text" value="1" placeholder="Darabszám" required>
+                    <br/>
+                    <input type="submit" value="Feltöltés!">
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-lg-5">
+            <h2>Törlés</h2>
+            <form method="post" action="/delete">
+                <fieldset>
+                    <legend>Alap adatok</legend>
+                    <label>Tárgy: </label>
+                    <select name="item" id="dropdown" onchange="changed()" autofocus>
+                        <% for(var i=0; i < items.length; i++) { %>
+                        <option value="<%= items[i].name %>"><%= items[i].name %></option>
+                        <% } %>
+                        <option value="newItem">Új hozzáadása</option>
+                    </select>
+                    <div id="newItemInputDiv"></div>
+                    <br/>
+                    <label>Elemszám: </label>
+                    <input name="count" type="text" value="1" placeholder="Darabszám" required>
+                    <br/>
+                    <input type="submit" value="Feltöltés!">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>A szertár elemei</h2>
+            <table>
+                <% for(var i=0; i < items.length; i++) { %>
+                <tr>
+                    <td><%= items[i].name %></td>
+                    <td><%= items[i].count %></td>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+</div>
 <% include ../partials/footer %>
