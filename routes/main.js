@@ -6,7 +6,6 @@ var removeItemMW= require('../middlewares/item/removeItem');
 var listItemsMW = require('../middlewares/item/listItems');
 var findItemMW = require('../middlewares/item/findItem');
 var updateItemMW = require('../middlewares/item/updateItem');
-var saveItemMW = require('../middlewares/item/saveItem');
 
 var itemModel = require('../models/item');
 
@@ -21,15 +20,16 @@ module.exports = function () {
         renderMainMW()
     );
 
-    router.post('/', 
+    router.post('/',
         validateRequestItemMW(),
         findItemMW(objectRepository),
         updateItemMW(objectRepository),
-        saveItemMW(),
         function(req, res, next) {
             res.redirect('/');
         }
     );
+
+
 
     router.post('/delete',
         removeItemMW(objectRepository),
