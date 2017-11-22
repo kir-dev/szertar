@@ -10,6 +10,7 @@ var passportOauth2 = require('passport-oauth2');
 
 var _main = require("./routes/main");
 var _login = require("./routes/login");
+var _item = require("./routes/item");
 
 process.on('uncaughtException', function(error) {
     console.log("Uncaught exception in master thread. Terminating in 3 s.");
@@ -48,6 +49,7 @@ app.use(function (req, res, next) {
 
 app.use('/login', _login());
 app.use('/', _main());
+app.use('/item', _item());
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("App started on port " + app.get('port'));
