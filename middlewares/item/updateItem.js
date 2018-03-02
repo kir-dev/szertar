@@ -11,7 +11,7 @@ module.exports = function (objectRepository) {
         var item = req.item;
         var newItem;
         if (!item) {
-            newItem = new Item({_id: req.body.newItem, count: count});
+            newItem = new Item({name: req.body.newItem, count: count});
         } else {
             item.count = parseInt(count, 10);
             newItem = item;

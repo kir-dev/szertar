@@ -4,7 +4,7 @@
 <% } %>
 <div class="container">
     <h1>SCH szertár</h1>
-    <div class="row" style="display: none">
+    <div class="row">
         <div class="col-md-5">
             <h2>Feltöltés</h2>
             <form method="post" action="/">
@@ -93,20 +93,27 @@
         </div>
     </div>
 </div>
-<div class="overlay" id="overlay">
-    <div class="edit">
-        <form method="post" action="/item">
-            <h3>Edit</h3>
+<div class="overlay" id="edit-overlay">
+    <div class="edit overlay-content">
+        <form class="form" method="post" action="/item">
+            <legend>Szerkesztés</legend>
             <input type="hidden" name="id" id="id">
-            <label for="name">Név:</label><input type="text" id="name" name="name"><br>
-            <label for="count">Mennyiség:</label><input type="number" min="0" id="count" name="count"><br>
-            <button class="btn btn-success">Mehet</button>
+            <fieldset class="form-group">
+                <label for="name">Név:</label>
+                <input class="form-control" type="text" id="name" name="name">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="count">Mennyiség:</label>
+                <input class="form-control" type="number" min="0" id="count" name="count"><br>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-success">Mehet</button>
+                <button href="javascript:void(0)" class="btn btn-danger" onclick="closeNav()">Mégse</button>
+            </div>
+
         </form>
-        <form method="get" action="/delete">
-            <input type="hidden" name="id" value="">
-            <button class="btn btn-danger">Törlés</button>
-        </form>
-        <button class="btn btn-neutral" onclick="cancel()">Mégse</button>
+
 
     </div>
 </div>
@@ -139,13 +146,15 @@
         var id = $("#item" + i).data("id");
         var name = $("#item" + i).data("name");
         var count = parseInt($("#item" + i).data("count"));
-        $("#overlay").css("display", "inline");
+        document.getElementById("edit-overlay").style.display = "block";
         $('input[id=id]').val(id);
         $('input[id=name]').val(name);
         $('input[id=count]').attr('value',count);
     }
-    function cancel(){
-        $("#overlay").css("display", "none");
+
+
+    function closeNav() {
+        document.getElementById("edit-overlay").style.display = "none";
     }
 </script>
 <% include ../partials/footer %>

@@ -35,7 +35,7 @@ passport.use(new BearerStrategy(
 
 app.set('port', config.port);
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 if(config.logrequests) {
     app.use(requestlogger.logrequest());
 }
