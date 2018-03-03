@@ -8,7 +8,7 @@ var BearerStrategy = require('passport-http-bearer').Strategy;
 var passport = require('passport');
 var passportOauth2 = require('passport-oauth2');
 
-var _main = require("./routes/main");
+var _admin = require("./routes/main");
 var _login = require("./routes/login");
 var _item = require("./routes/item");
 
@@ -48,7 +48,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/login', _login());
-app.use('/', _main());
+app.use('/', _admin());
 app.use('/item', _item());
 
 http.createServer(app).listen(app.get('port'), function() {

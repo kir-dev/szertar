@@ -128,6 +128,7 @@
             context: document.body
         }).done(function (response) {
             $("#count"+i).text(response);
+            $("#count"+i).data(response);
         });
     }
     function decrement(i) {

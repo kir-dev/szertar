@@ -2,7 +2,7 @@ var requireOption = require('../requireOption');
 
 module.exports = function (objectRepository) {
 
-    var Item = requireOption(objectRepository, 'itemModel');
+   // var Item = requireOption(objectRepository, 'itemModel');
 
     return function (req, res, next) {
         req.item.count-=1;

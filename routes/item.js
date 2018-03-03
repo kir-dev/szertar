@@ -17,7 +17,7 @@ module.exports = function () {
 
 
     router.post('/',
-        validateRequestItemMW(),
+      //  validateRequestItemMW(),
         findItemMW(objectRepository),
         updateItemMW(objectRepository),
         function (req, res, next) {
@@ -25,12 +25,12 @@ module.exports = function () {
         }
     );
     router.post('/increase',
-        validateRequestItemMW(),
+       // validateRequestItemMW(),
         findItemMW(objectRepository),
         increaseItemMW(objectRepository)
     );
     router.post('/decrease',
-        validateRequestItemMW(),
+      //  validateRequestItemMW(),
         findItemMW(objectRepository),
         decreaseItemMW(objectRepository)
     );
