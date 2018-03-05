@@ -1,9 +1,21 @@
+var mongoose = require('mongoose');
 var db = require('../config/db');
 
-var User = db.model('User', {
-    token: String,
-    dateOfRegistration: Date,
-    isAdmin: Boolean
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+
+var UserScema =  new Schema({
+    _id: {
+        type: ObjectId,
+        default: () => new mongoose.Types.ObjectId()
+    },
+    authSchId: String,
+    name: String,
+    email: String,
+}, {
+    timestamps: true
 });
+
+User = mongoose.model('User', UserScema);
 
 module.exports = User;

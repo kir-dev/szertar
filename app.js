@@ -9,8 +9,8 @@ var session = require('express-session');
 var passport = require('passport'),
     OAuth2Strategy = require('passport-oauth2');
 
-var _admin = require("./routes/main");
-var _login = require("./routes/login");
+var _main = require("./routes/main");
+var auth = require("./routes/auth");
 var _item = require("./routes/item");
 
 process.on('uncaughtException', function(error) {
@@ -22,45 +22,13 @@ process.on('uncaughtException', function(error) {
     }, 3000);
 });
 
-global.config = config;
-
 app.use(session({
     secret: config.sessionSecret,
     resave: true,
-    saveUninitialized: true,
-    cookie: {secure: true}
+    saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.use(new OAuth2Strategy({
-        authorizationURL: config.oauth2.authorizationURL,
-        tokenURL: config.oauth2.tokenURL,
-        clientID: config.oauth2.id,
-        clientSecret: config.oauth2.key,
-        callbackURL: config.oauth2.callbackURL,
-        scope: config.oauth2.scope
-    },
-    function (accessToken, refreshToken, profile, cb) {
-        console.log(accessToken + '\n' + refreshToken + '\n' + JSON.stringify
-            (profile));
-        var request = require('request');
-        request('https://auth.sch.bme.hu/api/profile?access_token=' + accessToken, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                return cb(null, JSON.parse(body), null);
-            } else {
-                return cb(new Error('hello'));
-            }
-        });
-    }));
-
-passport.serializeUser(function (user, done) {
-    done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-    done(null, user);
-});
 
 app.set('port', config.port);
 app.set('view engine', 'ejs');
@@ -70,14 +38,20 @@ if(config.logrequests) {
 }
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
+
 app.use(function (req, res, next) {
     res.tpl = {};
     res.tpl.error = {};
     return next();
 });
 
-app.use('/login', _login());
-app.use('/', _admin());
+app.use(function(req, res, next){
+    res.locals.user = req.user || null;
+    return next();
+});
+
+app.use('/auth', auth);
+app.use('/', _main());
 app.use('/item', _item());
 
 // catch 404 and forward to error handler
