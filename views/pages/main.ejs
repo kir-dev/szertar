@@ -7,7 +7,12 @@
     <% if(!user){ %>
     <a class="btn btn-success" href="/auth/login">Bejentkezés</a>
     <% }else{ %>
-        <p> Szia, <%= user.name%>! </p> 
+        <p> Szia, <%= user.name%>! </p>
+    <a class="btn btn-success" href="/auth/logout">Kijelentkezés</a>
+    
+        <% if(user.isAdmin){ %>
+            <p>WOW te egy admin vagy, ez oszt igen</p>
+        <% } %>
     <% }%>
     <div class="row">
         <div class="col-md-5">
