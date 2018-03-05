@@ -6,7 +6,7 @@ var request = require('request');
 var User = require('../models/user');
 var config = require('../config/config');
 
-router.post('/login',
+router.get('/login',
     passport.authenticate('oauth2')
 );
 

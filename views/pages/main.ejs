@@ -4,6 +4,11 @@
 <% } %>
 <div class="container">
     <h1>SCH szertár</h1>
+    <% if(!user){ %>
+    <a class="btn btn-success" href="/auth/login">Bejentkezés</a>
+    <% }else{ %>
+        <p> Szia, <%= user.name%>! </p> 
+    <% }%>
     <div class="row">
         <div class="col-md-5">
             <h2>Feltöltés</h2>
