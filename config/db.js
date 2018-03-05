@@ -11,14 +11,7 @@ db.once('open', function () {
     console.log("Connected to db.");
 });
 
-mongoose.connect(config.mongo.path, {
-    db: {
-        native_parser: true
-    },
-    server: {
-        auto_reconnect: true
-    }
-}, function (err) {
+mongoose.connect(config.mongo.path, function (err) {
     if (err) {
         console.log("MongoDB connection can not be established. Error: " + err);
         throw err;

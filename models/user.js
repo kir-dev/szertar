@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var db = require('../utilities/dbInit');
+var db = require('../config/db');
 
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;

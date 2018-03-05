@@ -1,16 +1,20 @@
-var Schema = require('mongoose').Schema;
+var mongoose = require('mongoose');
 var db = require('../config/db');
 
-var Item = db.model('Item', {
-    id:{
-        type: String
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+
+var ItemSchema = new Schema({
+    _id: {
+        type: ObjectId,
+        default: () => new mongoose.Types.ObjectId()
     },
-    name: {
-        type: String
-    },
-    count: {
-        type: Number
-    }
+    name: String,
+    count: Number,
+    stock: Number,
+    imgPath: String
 });
+
+var Item = db.model('Item', ItemSchema);
 
 module.exports = Item;

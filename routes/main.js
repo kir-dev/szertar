@@ -7,13 +7,9 @@ var listItemsMW = require('../middlewares/item/listItems');
 var findItemMW = require('../middlewares/item/findItem');
 var updateItemMW = require('../middlewares/item/updateItem');
 
-var itemModel = require('../models/item');
+var objectRepository = require('../models/objectRepository');
 
 module.exports = function () {
-
-    var objectRepository = {
-        itemModel: itemModel
-    };
 
     router.get('/', 
         listItemsMW(objectRepository),
@@ -21,15 +17,11 @@ module.exports = function () {
     );
 
     router.post('/',
-        validateRequestItemMW(),
-        findItemMW(objectRepository),
-        updateItemMW(objectRepository),
-        function(req, res, next) {
+        updateItemMW(),
+        function(req, res) {
             res.redirect('/');
         }
     );
-
-
 
     router.post('/delete',
         removeItemMW(objectRepository),
