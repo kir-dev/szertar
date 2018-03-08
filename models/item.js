@@ -15,6 +15,27 @@ var ItemSchema = new Schema({
     imgPath: String
 });
 
+ItemSchema.statics.findByAuthSchOrCreate = function (newItem, callback) {
+    this.findOne({
+        _id: newItem._id
+    }, (err, item) => {
+        if (err){
+            return callback(err);
+        }
+
+        if (item) {
+            return callback(null, item);
+        } else {
+            this.create(newItem, function (err, item) {
+                if (err){
+                    throw err;
+                } 
+                return callback(null, item);
+            });
+        }
+    });
+};
+
 var Item = db.model('Item', ItemSchema);
 
 module.exports = Item;

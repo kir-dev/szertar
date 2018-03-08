@@ -1,31 +1,33 @@
 var express = require('express');
 var router = express.Router();
-var objectRepository = require('../models/objectRepository');
-var updateItemMW = require('../middlewares/item/updateItem');
-var findItemMW = require('../middlewares/item/findItem');
-var validateRequestItemMW = require('../middlewares/item/validateRequestItem');
-var increaseItemMW = require('../middlewares/item/increaseItem');
-var decreaseItemMW = require('../middlewares/item/decreaseItem');
 
-router.post('/',
-    //  validateRequestItemMW(),
-    findItemMW(objectRepository),
-    updateItemMW(objectRepository),
-    function (req, res, next) {
+var objectRepository = require('../models/objectRepository');
+var getAllItems = require('../middlewares/item/getAllItems');
+var getItem = require('../middlewares/item/getItem');
+var newItem = require('../middlewares/item/newItem');
+var updateItem = require('../middlewares/item/updateItem');
+var deleteItem = require('../middlewares/item/deleteItem');
+
+router.get('/', getAllItems, function (req, res) {
+    res.render('pages/items');
+});
+
+router.get('/:id', getItem, function (req, res) {
+    res.render('pages/item');
+});
+
+router.post('/', newItem(), function (req, res) {
+    res.redirect('/');
+});
+
+router.put('/:id', updateItem(), function (req, res) {
+    res.redirect('/');
+});
+
+router.delete('/:id', deleteItem,
+    function (req, res) {
         res.redirect('/');
     }
-);
-
-router.post('/increase',
-    // validateRequestItemMW(),
-    findItemMW(objectRepository),
-    increaseItemMW(objectRepository)
-);
-
-router.post('/decrease',
-    //  validateRequestItemMW(),
-    findItemMW(objectRepository),
-    decreaseItemMW(objectRepository)
 );
 
 module.exports = router;

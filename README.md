@@ -1,5 +1,7 @@
 # szertar
-[![Build Status](https://travis-ci.org/kir-dev/szertar.svg?branch=master)](https://travis-ci.org/kir-dev/szertar)
+[![Build Status](https://travis-ci.org/kir-dev/szertar.svg?branch=master)]
+(https://travis-ci.org/kir-dev/szertar)
+[![Known Vulnerabilities](https://snyk.io/test/github/kir-dev/szertar/badge.svg)](https://snyk.io/test/github/kir-dev/szertar)
 
 # How to run
 

@@ -2,30 +2,28 @@ var config = require('./config/config');
 var http = require('http');
 var express = require('express');
 var app = express();
-var bodyparser = require("body-parser");
-var requestlogger = require("./middlewares/generic/logRequest");
-var BearerStrategy = require('passport-http-bearer').Strategy;
+var bodyparser = require('body-parser');
+var requestlogger = require('./middlewares/generic/logRequest');
 var session = require('express-session');
-var passport = require('passport'),
-    OAuth2Strategy = require('passport-oauth2');
+var passport = require('passport');
 
-var _main = require("./routes/main");
-var auth = require("./routes/auth");
-var _item = require("./routes/item");
+var main = require('./routes/main');
+var auth = require('./routes/auth');
+var item = require('./routes/item');
 
 process.on('uncaughtException', function(error) {
-    console.log("Uncaught exception in master thread. Terminating in 3 s.");
+    console.log('Uncaught exception in master thread. Terminating in 3 s.');
     console.log(error);
     setTimeout(function () {
-        console.log("Exiting master.");
+        console.log('Exiting master.');
         process.exit(1);
     }, 3000);
 });
 
 app.use(session({
     secret: config.sessionSecret,
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -47,12 +45,13 @@ app.use(function (req, res, next) {
 
 app.use(function(req, res, next){
     res.locals.user = req.user || null;
+    res.locals.active = req.url.split('/')[0];
     return next();
 });
 
+app.use('/', main);
 app.use('/auth', auth);
-app.use('/', _main());
-app.use('/item', _item());
+app.use('/item', item);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -86,5 +85,5 @@ app.use(function (err, req, res, next) {
 });
 
 http.createServer(app).listen(app.get('port'), function() {
-    console.log("App started on port " + app.get('port'));
+    console.log('App started on port ' + app.get('port'));
 });

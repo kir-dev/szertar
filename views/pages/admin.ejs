@@ -1,0 +1,94 @@
+<% include ../partials/header %>
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-md-8">
+            <form>
+                <caption>Új elemhozzáadása</caption><br>
+                <label for="nev">Név:</label><input type="text" name="nev" id="nev">
+                <label for="db">Darabszám:</label><input type="number" min="0" name="count" id="db">
+                <button type="submit" class="btn btn-dark">Küldés</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <caption>A szertár elemei</caption>
+                    <thead>
+                    <th>Név</th>
+                    <th>Darabszám</th>
+                    <th>Szerkesztés</th>
+                    <th>Eltávolítás</th>
+                    </thead>
+                    <tbody>
+                    <% for(var i=0; i < items.length; i++) { %>
+                    <tr>
+                        <td><span id="item<%=i%>" data-id="<%= items[i]._id %>" data-name="<%= items[i].name %>" data-count="<%= items[i].count %>"><%= items[i].name %></span></td>
+                        <td>
+                            <span id="count<%=i%>"><%= items[i].count %></span>
+                        </td>
+                        <td>
+                            <button type="button" onclick="edit(<%=i%>)" class="btn btn-default">
+                                    <i class="fas fa-pencil-alt"></i>
+                                                                </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="overlay" id="edit-overlay">
+    <div class="edit overlay-content">
+        <form class="form" method="POST" action="/item">
+            <legend>Szerkesztés</legend>
+            <input type="hidden" name="id" id="id">
+            <fieldset class="form-group">
+                <label for="name">Név:</label>
+                <input class="form-control" type="text" id="name" name="name">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="count">Mennyiség:</label>
+                <input class="form-control" type="number" min="0" id="count" name="count"><br>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-success">Mehet</button>
+                <button href="javascript:void(0)" class="btn btn-danger" onclick="closeNav()">Mégse</button>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>
+<script>
+
+    function edit(i) {
+        var id = $("#item" + i).data("id");
+        var name = $("#item" + i).data("name");
+        var count = parseInt($("#item" + i).data("count"));
+        document.getElementById("edit-overlay").style.display = "block";
+        $('input[id=id]').val(id);
+        $('input[id=name]').val(name);
+        $('input[id=count]').attr('value',count);
+    }
+
+
+    function closeNav() {
+        document.getElementById("edit-overlay").style.display = "none";
+    }
+</script>
+<% include ../partials/footer %>

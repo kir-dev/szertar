@@ -1,8 +1,7 @@
-var requireOption = require('../requireOption');
+var objectRepository = require('../../models/objectRepository');
+var itemModel = objectRepository.itemModel;
 
-module.exports = function (objectRepository) {
-
-    var Item = requireOption(objectRepository, 'itemModel');
+module.exports = function () {
 
     return function (req, res, next) {
         var id=req.body.id;
@@ -11,7 +10,7 @@ module.exports = function (objectRepository) {
         var item = req.item;
         var newItem;
         if (!item) {
-            newItem = new Item({name: req.body.newItem, count: count});
+            itemModel.create({name: req.body.newItem, count: count}).then(() => {return next();});
         } else {
             item.count = parseInt(count, 10);
             newItem = item;
