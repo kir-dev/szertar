@@ -18,6 +18,7 @@ module.exports = function () {
             request(config.oauth2.userURL + accessToken,
                 function (error, response, body) {
                     var authSchUser = JSON.parse(body);
+                    console.log(authSchUser);
                     User.findByAuthSchOrCreate(authSchUser, done);
                 });
         }));
