@@ -12,7 +12,7 @@ router.get('/admin',
     getAllItems(),
     function (req, res) {
         res.render('pages/admin', {
-            items: res.items
+            items: req.items
         });
     });
 

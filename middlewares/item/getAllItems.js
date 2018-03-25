@@ -6,7 +6,7 @@ var listItems = function () {
         itemModel.find({}, function (err, items) {
             if (err) throw err;
 
-            res.items = items;
+            req.items = items;
             return next();
         });
     };
