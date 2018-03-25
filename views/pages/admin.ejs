@@ -37,7 +37,7 @@
                                                                 </button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger">
+                            <button type="button" class="btn btn-danger" onclick="deleteItem(<%=i%>)">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                         </td>
@@ -75,6 +75,15 @@
     </div>
 </div>
 <script>
+    function deleteItem(i) {   
+
+        var id = $("#item" + i).data("id");
+        $.ajax({
+            url: '/item/' + id,
+            method: 'DELETE',
+            success: function(data){}
+        })
+    }
 
     function edit(i) {
         var id = $("#item" + i).data("id");

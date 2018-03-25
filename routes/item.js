@@ -5,7 +5,7 @@ var objectRepository = require('../models/objectRepository');
 var getAllItems = require('../middlewares/item/getAllItems');
 var getItem = require('../middlewares/item/getItem');
 var newItem = require('../middlewares/item/newItem');
-var updateItem = require('../middlewares/item/updateItem');
+var editItem = require('../middlewares/item/editItem');
 var deleteItem = require('../middlewares/item/deleteItem');
 
 router.get('/', getAllItems(), function (req, res) {
@@ -20,16 +20,14 @@ router.post('/create', newItem(), function (req, res) {
     res.redirect('/');
 });
 
-router.post('/edit', getItem(), updateItem(), function(req, res){
+router.post('/edit', getItem(), editItem(), function(req, res){
     res.redirect('/');
 });
 
-
-
 router.delete('/:id', deleteItem(),
-    function (req, res) {
-        res.redirect('/');
-    }
+function(req, res){
+    res.render('pages/items');
+}
 );
 
 module.exports = router;
