@@ -32,7 +32,11 @@ UserScema.statics.findByAuthSchOrCreate = function(authSchUser, callback){
             newUser.name = authSchUser.displayName;
             newUser.authSchId = authSchUser.internal_id;
             newUser.email = authSchUser.mail;
-            newUser.isAdmin = false;
+            newUser.isAdmin = authSchUser.eduPersonEntitlement.some(
+                (obj) => {
+                    return (obj.id == 106 || obj.id == 164); //106-Kir-Dev, 164-DSK
+                }
+            );
             newUser.save((err) => {
                 if (err) throw err;
                 return callback(null, newUser);
