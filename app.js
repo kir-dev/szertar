@@ -1,5 +1,4 @@
 var config = require('./config/config');
-var http = require('http');
 var express = require('express');
 var app = express();
 var bodyparser = require('body-parser');
@@ -10,8 +9,9 @@ var passport = require('passport');
 var main = require('./routes/main');
 var auth = require('./routes/auth');
 var item = require('./routes/item');
+var user = require('./routes/user');
 
-process.on('uncaughtException', function(error) {
+process.on('uncaughtException', function (error) {
     console.log('Uncaught exception in master thread. Terminating in 3 s.');
     console.log(error);
     setTimeout(function () {
@@ -31,11 +31,12 @@ app.use(passport.session());
 app.set('port', config.port);
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
-if(config.logrequests) {
+
+if (config.logrequests) {
     app.use(requestlogger.logrequest());
 }
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended: true}));
+app.use(bodyparser.urlencoded({ extended: true }));
 
 app.use(function (req, res, next) {
     res.tpl = {};
@@ -43,15 +44,17 @@ app.use(function (req, res, next) {
     return next();
 });
 
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
     res.locals.user = req.user || null;
     res.locals.active = req.url.split('/')[0];
     return next();
 });
 
+// routes
 app.use('/', main);
 app.use('/auth', auth);
 app.use('/item', item);
+app.use('/user', user);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -84,6 +87,6 @@ app.use(function (err, req, res, next) {
     });
 });
 
-http.createServer(app).listen(app.get('port'), function() {
-    console.log('App started on port ' + app.get('port'));
-});
+app.listen(app.get('port'),
+    () => console.log('App started on port ' + app.get('port'))
+);
