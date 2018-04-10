@@ -1,33 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
-var objectRepository = require('../models/objectRepository');
-var getAllItems = require('../middlewares/item/getAllItems');
 var getItem = require('../middlewares/item/getItem');
 var newItem = require('../middlewares/item/newItem');
 var editItem = require('../middlewares/item/editItem');
 var deleteItem = require('../middlewares/item/deleteItem');
+var requireAdmin = require('../middlewares/user/requireAdmin');
 
-router.get('/', getAllItems(), function (req, res) {
-    res.render('pages/items');
+router.post('/create', requireAdmin(), newItem(), function (req, res) {
+    res.redirect('/admin');
 });
 
-router.get('/:id', getItem(), function (req, res) {
-    res.render('pages/item');
+router.post('/edit', requireAdmin(), getItem(), editItem(), function (req, res) {
+    res.redirect('/admin');
 });
 
-router.post('/create', newItem(), function (req, res) {
-    res.redirect('/');
+router.delete('/:id', requireAdmin(), deleteItem(), function (req, res) {
+    res.status(200).end();
 });
-
-router.post('/edit', getItem(), editItem(), function(req, res){
-    res.redirect('/');
-});
-
-router.delete('/:id', deleteItem(),
-function(req, res){
-    res.render('pages/items');
-}
-);
 
 module.exports = router;
