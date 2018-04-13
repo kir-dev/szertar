@@ -6,9 +6,9 @@ module.exports = function () {
         items.findOne({
             _id: req.body.id
         }, function (err, item) {
-            if (err) {              
+            if (err) {
                 return next(err);
-            }         
+            }
             req.item = item;
             return next();
         });

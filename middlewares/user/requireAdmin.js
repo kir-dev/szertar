@@ -5,7 +5,7 @@ module.exports = function () {
             if (req.user.isAdmin) {
                 return next();
             } else {
-                return res.render('pages/errors/not-authorized');
+                return res.render('errors/not-authorized');
             }
     }];
 };

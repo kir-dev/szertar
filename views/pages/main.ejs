@@ -1,6 +1,5 @@
 <% include ../partials/header %>
 
-
 <div class="container">
 <% itemRows.forEach(row => { %>
     <div class="row">
@@ -13,8 +12,8 @@
                         <p class="description"> Darabszám: <%= item.count %></p>
                         <p class="description"> Készleten: <%= item.stock %></p>
                         <form action="#" method="GET" class="form-inline my-2 my-lg-0">
-                        <input class="form-control" type="number" value="1" size="3"></input>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Kosárba</button>
+                            <input class="form-control" type="number" value="1" size="3"></input>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Kosárba</button>
                         </form>
                     </div>
                 </div>
