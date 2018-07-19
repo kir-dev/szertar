@@ -21,6 +21,7 @@
                         <thead>
                             <th>Név</th>
                             <th>Darabszám</th>
+                            <th>Készleten</th>
                             <th>Szerkesztés</th>
                             <th>Eltávolítás</th>
                         </thead>
@@ -29,13 +30,18 @@
                                 <tr>
                                     <td>
                                         <span id="item<%=i%>" data-id="<%= items[i]._id %>" data-name="<%= items[i].name %>"
-                                            data-count="<%= items[i].count %>">
+                                            data-count="<%= items[i].count %>" data-stock="<%= items[i].stock %>">
                                             <%= items[i].name %>
                                         </span>
                                     </td>
                                     <td>
                                         <span id="count<%=i%>">
                                             <%= items[i].count %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span id="stock<%=i%>">
+                                            <%= items[i].stock %>
                                         </span>
                                     </td>
                                     <td>
@@ -68,6 +74,10 @@
                 <fieldset class="form-group">
                     <label for="count">Mennyiség:</label>
                     <input class="form-control" type="number" min="0" id="count" name="count" required>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="stock">Készleten:</label>
+                    <input class="form-control" type="number" min="0" id="stock" name="stock" required>
                     <br>
                 </fieldset>
 
@@ -92,10 +102,12 @@
             var id = $("#item" + i).data("id");
             var name = $("#item" + i).data("name");
             var count = parseInt($("#item" + i).data("count"));
+            var stock = parseInt($("#item" + i).data("stock"));
             document.getElementById("edit-overlay").style.display = "block";
             $('input[id=id]').val(id);
             $('input[id=name]').val(name);
             $('input[id=count]').val(count);
+            $('input[id=stock]').val(stock);
         }
 
         function closeNav() {
