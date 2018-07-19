@@ -1,7 +1,0 @@
-language: node_js
-node_js:
-  - "7"
-notifications:
-  email:
-    - oliver.jakab.r@gmail.com
-    - omar.osman.asd@gmail.com

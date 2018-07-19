@@ -4,7 +4,7 @@ var db = require('../config/db');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-var UserScema =  new Schema({
+var UserScema = new Schema({
     _id: {
         type: ObjectId,
         default: () => new mongoose.Types.ObjectId()
@@ -17,7 +17,7 @@ var UserScema =  new Schema({
     timestamps: true
 });
 
-UserScema.statics.findByAuthSchOrCreate = function(authSchUser, callback){
+UserScema.statics.findByAuthSchOrCreate = function (authSchUser, callback) {
     this.findOne({
         authSchId: authSchUser.internal_id
     }, (err, user) => {
@@ -34,7 +34,11 @@ UserScema.statics.findByAuthSchOrCreate = function(authSchUser, callback){
             newUser.email = authSchUser.mail;
             newUser.isAdmin = authSchUser.eduPersonEntitlement.some(
                 (obj) => {
-                   
+                    return (obj.id == 106 || obj.id == 164) && obj.status.length > 0; //106-Kir-Dev, 164-DSK
+                }
+            );
+            newUser.save((err) => {
+                if (err) throw err;
                 return callback(null, newUser);
             });
         }

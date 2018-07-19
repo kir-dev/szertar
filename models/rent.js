@@ -11,8 +11,14 @@ var RentSchema = new Schema({
     },
     isRented: Boolean,
     isReturned: Boolean,
-    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
-    user: { type: Schema.Types.ObjectId, ref: 'User' }
+    items: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 var Rent = db.model('Rent', RentSchema);

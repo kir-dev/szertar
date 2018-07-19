@@ -9,8 +9,14 @@ var CartSchema = new Schema({
         type: ObjectId,
         default: () => new mongoose.Types.ObjectId()
     },
-    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
-    user: { type: Schema.Types.ObjectId, ref: 'User' }
+    items: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 var Cart = db.model('Cart', CartSchema);

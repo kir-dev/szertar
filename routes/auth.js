@@ -10,16 +10,13 @@ router.get('/login',
 
 router.get('/authsch/callback',
     passport.authenticate('oauth2', {
+        successRedirect: '/',
         failureRedirect: '/auth/login'
-    }),
-    function (req, res) {
-        res.redirect('/');
-    });
+    }))
 
 router.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
-
 
 module.exports = router;

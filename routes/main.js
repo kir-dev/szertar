@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var renderMainMW = require('../middlewares/generic/renderMain');
 var getAllItems = require('../middlewares/item/getAllItems');
+var renderMain = require('../middlewares/generic/renderMain');
 var requireAdmin = require('../middlewares/user/requireAdmin');
 
+/* GET home page. */
 router.get('/',
     getAllItems(),
-    renderMainMW()
+    renderMain()
 );
 
 router.get('/admin',

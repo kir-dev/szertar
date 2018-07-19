@@ -6,7 +6,6 @@
 # How to run
 
 - have [nodejs](https://nodejs.org/en/download/) installed
-
 - have npm installed
 - have [mongodb](https://www.mongodb.com/download-center?jmp=nav#community) installed and running on default port 27017
 
@@ -14,7 +13,7 @@ go to root folder of the project ../szertar
 
 $ `npm i` 
 
-$ `node app.js` 
+$ `node bin/www` 
 
 # config/config.js
 Sample config
