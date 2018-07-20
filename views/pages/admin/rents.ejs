@@ -1,28 +1,38 @@
-<% include ../partials/header %>
-<%
+<% include ../../partials/header %>
+<% 
 function getItem(id){
     return items.find(function(item){
         return item._id.toString() === id.toString()
+    })
+}
+
+function getUser(id){
+    return users.find(function(user){
+        return user._id.toString() === id.toString()
     })
 }
 %>
 
 <div class="container-fluid">
     <div class="row">
+        <% include ../../partials/sidebar %>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <% if( !rents.length ){ %>
-                <div class="alert alert-warning" role="alert">
-                    <h4>Még nem raktár eszközt a kosárba</h4>
-                </div>
+            <div class="alert alert-warning" role="alert">
+                <h4>Egyetlen kölcsönzés sem található!</h4>
+            </div>
             <% } else { %>
-            <h2>Kosár</h2>
+            <h2>Kölcsönzések</h2>
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    <caption>Kosár</caption>
+                    <caption>Felhasználók kölcsönzései</caption>
                     <thead>
                         <tr>
                             <th>Rented</th>
                             <th>Rented Image</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
                             <th>Eltávolítás</th>
                         </tr>
                     </thead>
@@ -30,9 +40,14 @@ function getItem(id){
                         <% for(var i=0; i<rents.length; i++) { %>
                             <tr>
                                 <td>
+                                <span id="rent<%=i%>" data-id="<%=rents[i]._id%>">
                                     <%= getItem(rents[i].items[0]).name %>
+                                </span>
                                 </td>
                                 <td><img src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                <td><%= getUser(rents[i].user).name %></td>
+                                <td><a href="mailto:<%= getUser(rents[i].user).email %>"><%= getUser(rents[i].user).email %></a></td>
+                                <td><%= getUser(rents[i].user).phone %></td>
                                 <td>
                                     <button type="button" class="btn btn-danger" onclick="deleteRent(<%=i%>)">
                                         <i class="fas fa-trash-alt"></i>
@@ -47,4 +62,14 @@ function getItem(id){
         </main>
     </div>
 </div>
-<% include ../partials/footer %>
+<<script>
+    function deleteRent(i){
+        var id = $("#rent" + i).data("id");
+        $.ajax({
+            url: './rents/' + id,
+            method: 'DELETE',
+            success: () => location.reload()
+        })
+    }
+</script>
+<% include ../../partials/footer %>

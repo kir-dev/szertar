@@ -19,6 +19,8 @@ var RentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
+}, {
+    timestamps: true
 });
 
 var Rent = db.model('Rent', RentSchema);

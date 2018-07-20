@@ -1,0 +1,26 @@
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/admin" class="nav-link <% if(!active[2]){ %> active <% } %>">
+                    Irányítópult
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/rents" class="nav-link <% if(active[2] === 'rents'){ %> active <% } %>">
+                    Kölcsönzések
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/items" class="nav-link <% if(active[2] === 'items'){ %> active <% } %>">
+                    Eszközök
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/users" class="nav-link <% if(active[2] === 'users'){ %> active <% } %>">
+                    Felhasználók
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

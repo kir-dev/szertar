@@ -1,0 +1,39 @@
+<% include ../../partials/header %>
+<div class="container">
+    <div class="row">
+        <% include ../../partials/sidebar %>
+        <main role="main">
+            <h2>Felhasználók</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <caption>Felhasználók</caption>    
+                    <thead>
+                        <tr>
+                            <th>Admin</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Eltávolítás</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i=0; i < users.length; i++) { %>
+                        <tr>
+                            <td><i class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
+                            <td><%=users[i].name%></td>
+                            <td><a href="mailto:<%=users[i].email%>"><%=users[i].email%></a></td>
+                            <td><a href="<%=users[i].phone%>"></a><%=users[i].phone%></td>
+                            <td>
+                                <button type="button" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+<% include ../../partials/footer %>

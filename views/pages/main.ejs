@@ -1,6 +1,13 @@
 <% include ../partials/header %>
+<% var cantRent = !(itemRows.length) || itemRows[0].every((item) => {return !(item.stock)}) %>
 
 <div class="container">
+<% if( cantRent ){ %>
+<div class="alert alert-warning" role="alert">
+    <h4>Egyetlen eszköz sem kölcsönözhető!</h4>
+    <p>Kérlek próbáld később újra</p>
+</div>
+<% } %>
 <% itemRows.forEach(row => { %>
     <div class="row">
         <% row.forEach(item => { %>
@@ -11,10 +18,12 @@
                         <h3><%= item.name %></h3>
                         <p class="description"> Darabszám: <%= item.count %></p>
                         <p class="description"> Készleten: <%= item.stock %></p>
+                        <% if(!cantRent) {%>
                         <form action="/item/rent" method="POST" class="form-inline my-2 my-lg-0">
                             <input type = "hidden" name = "itemId" value = <%= item._id %>>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Kölcsönzés</button>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"<% if(!item.stock) {%> disabled<% } %>>Kosárba</button>
                         </form>
+                        <% } %>
                     </div>
                 </div>
             </div>

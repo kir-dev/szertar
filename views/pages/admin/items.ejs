@@ -1,0 +1,161 @@
+<% include ../../partials/header %>
+<div class="container-fluid">
+    <div class="row">
+        <% include ../../partials/sidebar %>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <% if(!items.length){ %>
+            <div class="alert alert-danger" role="alert">
+                <h4>Egyetlen eszköz sem található!</h4>
+                <p>Kérlek alább add hozzá az eszközöket</p>
+            </div>
+            <% } %>
+            <div class="col-md-8">
+                <h2>Új eszköz hozzáadása</h2>
+                <figure class="figure">
+                    <form action="/item/create" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nev">Név<span class="text-danger">*</span></label>
+                                <input type="text" name="item" id="nev" placeholder="Név" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="db">Darabszám<span class="text-danger">*</span></label>
+                                <input type="number" min="0" name="count" id="db" placeholder="Darabszám" class="form-control" required>
+                            </div>
+                        </div>
+                        <label for="img-btn" class="btn btn-primary btn-lg">
+                            <input type="file" id="img-btn" accept="image/*" capture hidden onchange="displayAsImage(this)">
+                            Kép feltöltése
+                        </label>
+                        <button type="submit" class="btn btn-dark">Küldés</button>
+                    </form>
+                    <figcaption class="figure-caption">Telefonnal akár rögtön fellehet tölteni!</figcaption>
+                </figure>
+                <div id="img" style="width: 100%; overflow: hidden; display: none">
+                    Kép előnézet
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h2>Eszközök</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <caption>A szertár elemei</caption>
+                        <thead>
+                            <tr>
+                                <th>Kép</th>
+                                <th>Név</th>
+                                <th>Darabszám</th>
+                                <th>Készleten</th>
+                                <th>Szerkesztés</th>
+                                <th>Eltávolítás</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(var i=0; i < items.length; i++) { %>
+                                <tr>
+                                    <td><img src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                    <td>
+                                        <span id="item<%=i%>" data-id="<%= items[i]._id %>" data-name="<%= items[i].name %>"
+                                            data-count="<%= items[i].count %>" data-stock="<%= items[i].stock %>">
+                                            <%= items[i].name %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span id="count<%=i%>">
+                                            <%= items[i].count %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span id="stock<%=i%>">
+                                            <%= items[i].stock %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" onclick="edit(<%=i%>)" class="btn btn-default">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="deleteItem(<%=i%>)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<div class="overlay" id="edit-overlay">
+    <div class="edit overlay-content">
+        <form class="form" method="POST" action="/item/edit">
+            <legend>Szerkesztés</legend>
+            <input type="hidden" name="id" id="id">
+            <fieldset class="form-group">
+                <label for="name">Név:</label>
+                <input class="form-control" type="text" id="name" name="name" required>
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="count">Mennyiség:</label>
+                <input class="form-control" type="number" min="0" id="count" name="count" required>
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="stock">Készleten:</label>
+                <input class="form-control" type="number" min="0" id="stock" name="stock" required>
+                <br>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-success">Mehet</button>
+                <span class="btn btn-danger" onclick="closeNav()">Mégse</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function deleteItem(i) {
+        var id = $("#item" + i).data("id");
+        $.ajax({
+            url: '/item/' + id,
+            method: 'DELETE',
+            success: () => location.reload()
+        })
+    }
+
+    function edit(i) {
+        var id = $("#item" + i).data("id");
+        var name = $("#item" + i).data("name");
+        var count = parseInt($("#item" + i).data("count"));
+        var stock = parseInt($("#item" + i).data("stock"));
+        document.getElementById("edit-overlay").style.display = "block";
+        $('input[id=id]').val(id);
+        $('input[id=name]').val(name);
+        $('input[id=count]').val(count);
+        $('input[id=stock]').val(stock);
+    }
+
+    function closeNav() {
+        document.getElementById("edit-overlay").style.display = "none";
+    }
+
+    function displayAsImage(file) {
+        $("#img img").remove()
+        $("#img").show()
+        var imgURL = URL.createObjectURL(file.files[0]),
+            img = document.createElement('img');
+            img.style.width = "500px"
+            img.style.height = "500px"
+
+        img.onload = function () {
+            URL.revokeObjectURL(imgURL);
+        };
+
+        img.src = imgURL;
+        document.getElementById("img").appendChild(img);
+    }
+    
+</script>
+<% include ../../partials/footer %>

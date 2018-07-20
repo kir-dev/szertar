@@ -1,6 +1,7 @@
 .idea
 config/config.js
 .vscode/launch.json
+public/img
 
 # Logs
 logs

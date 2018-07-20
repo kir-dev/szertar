@@ -14,6 +14,7 @@ var main = require('./routes/main');
 var auth = require('./routes/auth');
 var item = require('./routes/item');
 var user = require('./routes/user');
+var admin = require('./routes/admin')
 
 var app = express();
 
@@ -54,7 +55,7 @@ app.use(function (req, res, next) {
 
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
-  res.locals.active = req.url.split('/')[1];
+  res.locals.active = req.url.split('/');
   return next();
 });
 
@@ -63,6 +64,7 @@ app.use('/', main);
 app.use('/auth', auth);
 app.use('/item', item);
 app.use('/user', user);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
