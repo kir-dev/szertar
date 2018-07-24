@@ -10,8 +10,10 @@ var requireAuth = require('../middlewares/user/requireAuthentication');
 var rentItem = require('../middlewares/item/rentItem');
 var getAllItem = require('../middlewares/item/getAllItems');
 var renderMain = require('../middlewares/generic/renderMain');
+var multer  = require('multer')
+var upload = multer({ dest: './public/img/' })
 
-router.post('/create', requireAdmin(), newItem(), function (req, res) {
+router.post('/create', requireAdmin(), upload.single("img"), newItem(), function (req, res) {
     res.redirect('/admin/items');
 });
 

@@ -1,7 +1,74 @@
 <% include ../partials/header %>
-<div class="container">
-    <p>
-        Add rents
-    </p>
+<%
+function getItem(id){
+    return items.find(function(item){
+        return item._id.toString() === id.toString()
+    })
+}
+
+function getState(state){
+    switch(state){
+        case 0:
+            return "Kosárban"
+            break
+        case 1:
+            return "Kiadásra vár"
+            break
+        case 2:
+            return "Kiadva"
+            break
+        case 3:
+            return "Leadásra vár"
+            break
+        case 4:
+            return "Leadva"
+            break
+    }
+}
+%>
+<div class="container-fluid">
+    <div class="row">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <% if( !rents.length || rents.every((rent) => !rent.state) ){ %>
+                <div class="alert alert-warning" role="alert">
+                    <h4>Még nem kölcsönöztél eszközt</h4>
+                </div>
+            <% } else { %>
+            <h2>Kölcsönzések</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <caption>Kölcsönzések</caption>
+                    <thead>
+                        <tr>
+                            <th>Állapot</th>
+                            <th>Eszköz</th>
+                            <th>Kép</th>
+                            <th>Lead</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i=0; i<rents.length; i++) { %>
+                            <% if(!rents[i].state) continue %>
+                            <% for(var j=0; j< rents[i].items.length; j++) { %>
+                            <tr>
+                                <td><%= getState(rents[i].state) %></td>
+                                <td>
+                                    <%= getItem(rents[i].items[j]._id).name %>(<b><%= rents[i].items[j].amount %></b>)
+                                </td>
+                                <td><img class=".item-image" src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick="deleteRent(<%=i%>)" <%if(rents[i].state != 2){%>disabled<%}%>>
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </main>
+    </div>
 </div>
 <% include ../partials/footer %>

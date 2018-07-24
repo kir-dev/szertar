@@ -123,3 +123,9 @@ body {
     font-size: .75rem;
     text-transform: uppercase;
 }
+
+/* Item image*/
+.item-image{
+    width: 60px;
+    height: 60px;
+}

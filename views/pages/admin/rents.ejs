@@ -11,13 +11,33 @@ function getUser(id){
         return user._id.toString() === id.toString()
     })
 }
+
+function getState(state){
+    switch(state){
+        case 0:
+            return "Kosárban"
+            break
+        case 1:
+            return "Kiadásra vár"
+            break
+        case 2:
+            return "Kiadva"
+            break
+        case 3:
+            return "Leadásra vár"
+            break
+        case 4:
+            return "Leadva"
+            break
+    }
+}
 %>
 
 <div class="container-fluid">
     <div class="row">
         <% include ../../partials/sidebar %>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-            <% if( !rents.length ){ %>
+            <% if( !rents.length || !items.length || rents.every((rent) => rent.state == 0) ){ %>
             <div class="alert alert-warning" role="alert">
                 <h4>Egyetlen kölcsönzés sem található!</h4>
             </div>
@@ -28,26 +48,37 @@ function getUser(id){
                     <caption>Felhasználók kölcsönzései</caption>
                     <thead>
                         <tr>
-                            <th>Rented</th>
-                            <th>Rented Image</th>
-                            <th>Name</th>
+                            <th>Állapot</th>
+                            <th>Eszköz</th>
+                            <th>Név</th>
                             <th>Email</th>
-                            <th>Phone</th>
+                            <th>Telefon</th>
+                            <th>Elfogad</th>
                             <th>Eltávolítás</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% for(var i=0; i<rents.length; i++) { %>
+                            <% if(!rents[i].state) continue %>
                             <tr>
                                 <td>
                                 <span id="rent<%=i%>" data-id="<%=rents[i]._id%>">
-                                    <%= getItem(rents[i].items[0]).name %>
+                                    <%= getState(rents[i].state) %>
                                 </span>
                                 </td>
-                                <td><img src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                <td>
+                                <% for(var j=0; j< rents[i].items.length; j++) { %>
+                                    <span style="display: block"><%= getItem(rents[i].items[j]._id).name%>(<b><%= rents[i].items[j].amount %></b>)</span>
+                                <% } %>
+                                </td>
                                 <td><%= getUser(rents[i].user).name %></td>
                                 <td><a href="mailto:<%= getUser(rents[i].user).email %>"><%= getUser(rents[i].user).email %></a></td>
                                 <td><%= getUser(rents[i].user).phone %></td>
+                                <td>
+                                    <button type="button" class="btn btn-success" onclick="approveRent(<%=i%>)" <% if(rents[i].state % 2 == 0) { %> disabled <% } %>>
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-danger" onclick="deleteRent(<%=i%>)">
                                         <i class="fas fa-trash-alt"></i>
@@ -68,6 +99,15 @@ function getUser(id){
         $.ajax({
             url: './rents/' + id,
             method: 'DELETE',
+            success: () => location.reload()
+        })
+    }
+
+    function approveRent(i){
+        var id = $("#rent" + i).data("id")
+        $.ajax({
+            url: './rents/' + id,
+            method: 'POST',
             success: () => location.reload()
         })
     }

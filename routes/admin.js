@@ -5,6 +5,8 @@ var getAllItems = require('../middlewares/item/getAllItems');
 var getAllUsers = require('../middlewares/user/getAllUsers')
 var getAllRents = require('../middlewares/item/getAllRents')
 var deleteRent = require('../middlewares/item/deleteRent')
+var approveRent = require('../middlewares/item/approveRent')
+var deleteUser = require('../middlewares/user/deleteUser')
 
 router.get('/items', requireAdmin(), getAllItems(), function(req, res){
     res.render('pages/admin/items', {
@@ -25,6 +27,14 @@ router.get('/users', requireAdmin(), getAllUsers(), function(req, res){
 })
 
 router.delete('/rents/:id', requireAdmin(), deleteRent(), function(req, res){
+    res.status(200).end()
+})
+
+router.delete('/users/:id', requireAdmin(), deleteUser(), function(req, res){
+    res.status(200).end()
+})
+
+router.post('/rents/:id', requireAdmin(), approveRent(), function(req, res){
     res.status(200).end()
 })
 

@@ -3,13 +3,13 @@ var itemModel = objectRepository.itemModel;
 
 var newItem = function(){
     return function(req, res, next){
-
-            console.log(req.body);
+        console.log(req.file);
+        
         itemModel.create(new itemModel({
             name: req.body.item,
             count: req.body.count,
             stock: req.body.count,
-            imgPath: req.body.image
+            imgPath: (req.file != undefined) ? req.file.path.slice(req.file.path.indexOf('\\')) : ''
         }), (err) => {
             if(err) next(err);
             return next();

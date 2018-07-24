@@ -10,9 +10,9 @@ function getItem(id){
 <div class="container-fluid">
     <div class="row">
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-            <% if( !rents.length ){ %>
+            <% if( !rents.length || rents.every(rent => rent.state > 0) ){ %>
                 <div class="alert alert-warning" role="alert">
-                    <h4>Még nem raktár eszközt a kosárba</h4>
+                    <h4>Nincs eszköz a kosaradban</h4>
                 </div>
             <% } else { %>
             <h2>Kosár</h2>
@@ -21,28 +21,37 @@ function getItem(id){
                     <caption>Kosár</caption>
                     <thead>
                         <tr>
-                            <th>Rented</th>
-                            <th>Rented Image</th>
+                            <th>Eszköz</th>
+                            <th>Kép</th>
                             <th>Eltávolítás</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% for(var i=0; i<rents.length; i++) { %>
+                            <% if(rents[i].isRented == true || rents[i].state > 0) continue %>
+                            <% for(var j=0; j< rents[i].items.length; j++) { %>
                             <tr>
                                 <td>
-                                    <%= getItem(rents[i].items[0]).name %>
+                                    <span id="<%=i%>" data-id="<%=rents[i]._id%>">
+                                        <%= getItem(rents[i].items[j]._id).name %><input type="number" value="<%= rents[i].items[j].amount %>" min='1' max='<%=getItem(rents[i].items[j]._id).stock%>'>
+                                    </span>
                                 </td>
-                                <td><img src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                <td><img class=".item-image" src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
                                 <td>
                                     <button type="button" class="btn btn-danger" onclick="deleteRent(<%=i%>)">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
                             </tr>
+                            <% } %>
                         <% } %>
                     </tbody>
                 </table>
             </div>
+            <form action="./cart/confirm" method="POST">
+                <input type="hidden" name="id" value="<%= rents.find(rent => !rent.state)._id  %>">
+                <button type="submit" class="btn btn-success">Véglegesít</button>
+            </form>
             <% } %>
         </main>
     </div>

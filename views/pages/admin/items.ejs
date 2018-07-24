@@ -12,7 +12,7 @@
             <div class="col-md-8">
                 <h2>Új eszköz hozzáadása</h2>
                 <figure class="figure">
-                    <form action="/item/create" method="POST">
+                    <form action="/item/create" method="POST" enctype="multipart/form-data">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="nev">Név<span class="text-danger">*</span></label>
@@ -24,15 +24,22 @@
                             </div>
                         </div>
                         <label for="img-btn" class="btn btn-primary btn-lg">
-                            <input type="file" id="img-btn" accept="image/*" capture hidden onchange="displayAsImage(this)">
+                            <input type="file" id="img-btn" name="img" accept="image/*" capture hidden onchange="displayAsImage(this)">
                             Kép feltöltése
                         </label>
                         <button type="submit" class="btn btn-dark">Küldés</button>
                     </form>
-                    <figcaption class="figure-caption">Telefonnal akár rögtön fellehet tölteni!</figcaption>
+                    <figcaption class="figure-caption">Telefonnal fényképezés után feltölthető azonnal!</figcaption>
                 </figure>
-                <div id="img" style="width: 100%; overflow: hidden; display: none">
-                    Kép előnézet
+            </div>
+            <div id="img" class="col-lg-3" style="display: none">
+                <div class="card">
+                    <img class="card-img-top img-responsive" src="https://placeholdit.imgix.net/~text?txtsize=28&txt=200%C3%97200&w=200&h=200">
+                    <div class="card-body">
+                        <h3>Előnézet</h3>
+                        <p class="description"> Darabszám: 10</p>
+                        <p class="description"> Készleten: 10</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-12">
@@ -53,7 +60,7 @@
                         <tbody>
                             <% for(var i=0; i < items.length; i++) { %>
                                 <tr>
-                                    <td><img src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></td>
+                                    <td><img src="<%= items[i].imgPath || 'https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60' %>"></td>
                                     <td>
                                         <span id="item<%=i%>" data-id="<%= items[i]._id %>" data-name="<%= items[i].name %>"
                                             data-count="<%= items[i].count %>" data-stock="<%= items[i].stock %>">
@@ -110,7 +117,7 @@
 
             <div class="form-group">
                 <button class="btn btn-success">Mehet</button>
-                <span class="btn btn-danger" onclick="closeNav()">Mégse</button>
+                <span class="btn btn-danger" onclick="closeNav()">Mégse</span>
             </div>
         </form>
     </div>
@@ -130,7 +137,7 @@
         var name = $("#item" + i).data("name");
         var count = parseInt($("#item" + i).data("count"));
         var stock = parseInt($("#item" + i).data("stock"));
-        document.getElementById("edit-overlay").style.display = "block";
+        $('#edit-overlay').show()
         $('input[id=id]').val(id);
         $('input[id=name]').val(name);
         $('input[id=count]').val(count);
@@ -138,23 +145,14 @@
     }
 
     function closeNav() {
-        document.getElementById("edit-overlay").style.display = "none";
+        $('#edit-overlay').hide()
     }
 
     function displayAsImage(file) {
-        $("#img img").remove()
         $("#img").show()
-        var imgURL = URL.createObjectURL(file.files[0]),
-            img = document.createElement('img');
-            img.style.width = "500px"
-            img.style.height = "500px"
-
-        img.onload = function () {
-            URL.revokeObjectURL(imgURL);
-        };
-
-        img.src = imgURL;
-        document.getElementById("img").appendChild(img);
+        var imgURL = URL.createObjectURL(file.files[0])
+        $('#img img')[0].onload = () => URL.revokeObjectURL(imgURL)
+        $('#img img').attr('src', imgURL)
     }
     
 </script>

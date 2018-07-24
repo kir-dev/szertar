@@ -2,6 +2,7 @@
 config/config.js
 .vscode/launch.json
 public/img
+jsconfig.json
 
 # Logs
 logs
@@ -76,4 +77,3 @@ typings/
 
 # Serverless directories
 .serverless
-jsconfig.json

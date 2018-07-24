@@ -10,9 +10,9 @@
                     <thead>
                         <tr>
                             <th>Admin</th>
-                            <th>Name</th>
+                            <th>Név</th>
                             <th>Email</th>
-                            <th>Phone</th>
+                            <th>Telefon</th>
                             <th>Eltávolítás</th>
                         </tr>
                     </thead>
@@ -20,11 +20,11 @@
                         <% for(var i=0; i < users.length; i++) { %>
                         <tr>
                             <td><i class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
-                            <td><%=users[i].name%></td>
+                            <td><span id="user<%=i%>" data-id="<%=users[i]._id%>"><%=users[i].name%></span></td>
                             <td><a href="mailto:<%=users[i].email%>"><%=users[i].email%></a></td>
                             <td><a href="<%=users[i].phone%>"></a><%=users[i].phone%></td>
                             <td>
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger" onclick="deleteUser(<%=i%>)">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </td>
@@ -36,4 +36,14 @@
         </main>
     </div>
 </div>
+<script>
+    function deleteUser(i){
+        var id = $("#user" + i).data("id");
+        $.ajax({
+            url: './users/' + id,
+            method: 'DELETE',
+            success: () => location.reload()
+        })
+    }
+</script>
 <% include ../../partials/footer %>
