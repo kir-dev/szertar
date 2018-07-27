@@ -4,6 +4,7 @@ var getAllRents = require('../middlewares/item/getAllRents')
 var getAllItems = require('../middlewares/item/getAllItems')
 var requireAuth = require('../middlewares/user/requireAuthentication')
 var confirmCart = require('../middlewares/user/confirmCart')
+var returnRent = require('../middlewares/user/returnRent')
 
 router.get('/rents', requireAuth, getAllItems(), getAllRents(),
     (req, res) => {
@@ -13,6 +14,10 @@ router.get('/rents', requireAuth, getAllItems(), getAllRents(),
         });
     }
 );
+
+router.post('/rents/:id', requireAuth, returnRent(), (req, res) => {
+    res.status(200).end()
+})
 
 router.get('/cart', requireAuth, getAllItems(), getAllRents(),
     (req, res) => {

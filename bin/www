@@ -88,4 +88,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log("✔ Express server listening on port %d in %s mode", app.get('port') || 8000, app.get('env'));
 }

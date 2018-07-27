@@ -4,8 +4,7 @@ var rentModel = objectRepository.rentModel
 var listRents = function(){
     return function(req, res, next) {
         rentModel.find((req.user.isAdmin && req.originalUrl.split('/')[1] != "user") ? {} : {user : req.user._id}, function(err, rents){
-            if(err) throw err
-
+            if (err) return next(err)
             req.rents = rents
             return next()
         })

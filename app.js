@@ -53,11 +53,23 @@ app.use(function (req, res, next) {
   return next();
 });
 
+var objectRepository = require('./models/objectRepository')
+var rentModel = objectRepository.rentModel
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
   res.locals.active = req.url.split('/');
-  return next();
+  rentModel.find({state: 1}, (err, newRent) => {
+    if(err) return next(err)
+    res.locals.newRents = newRent.length
+    res.newRent = newRent.length
+    return next()
+  })
 });
+
+app.locals.adminConnections = {}
+app.locals.userConnections = {}
+var sse = require('./middlewares/user/sse')
+app.use(sse)
 
 // routes
 app.use('/', main);

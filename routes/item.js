@@ -11,10 +11,16 @@ var rentItem = require('../middlewares/item/rentItem');
 var getAllItem = require('../middlewares/item/getAllItems');
 var renderMain = require('../middlewares/generic/renderMain');
 var multer  = require('multer')
-var upload = multer({ dest: './public/img/' })
+var upload = multer({ dest: './upload/' })
+var sharp = require('sharp')
 
 router.post('/create', requireAdmin(), upload.single("img"), newItem(), function (req, res) {
-    res.redirect('/admin/items');
+    if(req.file) sharp(req.file.path).webp({ lossless: true }).resize(200, 200).toFile('./public/img/'+req.file.filename,(err, info) => {
+        console.log(err)
+        res.redirect('/admin/items')
+    })
+    else
+    res.redirect('/admin/items')
 });
 
 router.post('/edit', requireAdmin(), getItem(), editItem(), function (req, res) {
@@ -26,6 +32,6 @@ router.delete('/:id', requireAdmin(), deleteItem(), function (req, res) {
 });
 
 router.post('/rent', requireAuth, rentItem(), function(req, res){
-    res.redirect('/');
+    res.redirect('/')
 });
 module.exports = router;
