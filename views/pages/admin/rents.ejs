@@ -44,7 +44,7 @@ function getState(state){
             <% } else { %>
             <h2>Kölcsönzések</h2>
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                     <caption>Felhasználók kölcsönzései</caption>
                     <thead>
                         <tr>
@@ -60,20 +60,17 @@ function getState(state){
                     <tbody>
                         <% for(var i=0; i<rents.length; i++) { %>
                             <% if(!rents[i].state) continue %>
-                            <tr>
-                                <td>
-                                <span id="rent<%=i%>" data-id="<%=rents[i]._id%>">
-                                    <%- getState(rents[i].state) %>
-                                </span>
-                                </td>
+                            <tr id="rent<%=i%>" data-id="<%=rents[i]._id%>">
+                                <td><%- getState(rents[i].state) %></td>
                                 <td>
                                 <% for(var j=0; j< rents[i].items.length; j++) { %>
                                     <span style="display: block"><%= getItem(rents[i].items[j]._id).name%>(<b><%= rents[i].items[j].amount %></b>)</span>
                                 <% } %>
                                 </td>
                                 <td><%= getUser(rents[i].user).name %></td>
-                                <td><a href="mailto:<%= getUser(rents[i].user).email %>"><%= getUser(rents[i].user).email %></a></td>
-                                <td><%= getUser(rents[i].user).phone %></td>
+                                <% var date = new Date(rents[i].updatedAt) %>
+                                <td><a href="mailto:<%=encodeURI(getUser(rents[i].user).email+'?subject=[SCH Szertár] Kölcsönzéssel kapcsolatos információ&body=Kedves '+getUser(rents[i].user).name+'!\n\nA '+date.toLocaleDateString()+' '+date.getHours()+':'+date.getMinutes()+'-kor leadott kölcsönzésedet !EKKOR! veheted át\n\nÜdvözlettel:\nSCH Szertár')%>"><%= getUser(rents[i].user).email %></a></td>
+                                <td><a href="tel:<%= getUser(rents[i].user).phone %>"><%= getUser(rents[i].user).phone %></a></td>
                                 <td>
                                     <button type="button" class="btn btn-success" onclick="approveRent(<%=i%>)" <% if(rents[i].state % 2 == 0) { %> disabled <% } %>>
                                         <i class="fas fa-check"></i>
@@ -94,13 +91,19 @@ function getState(state){
         </main>
     </div>
 </div>
-<<script>
+<script>
     function deleteRent(i){
         var id = $("#rent" + i).data("id");
         $.ajax({
             url: './rents/' + id,
             method: 'DELETE',
-            success: () => location.reload()
+            success: () => {
+                if($('table tbody').children().length == 1) location.reload()
+                else {
+                    $('.newRents').text(parseInt($('.newRents').html())-1)
+                    $('#rent'+i)[0].remove() 
+                }
+            }
         })
     }
 
@@ -109,7 +112,9 @@ function getState(state){
         $.ajax({
             url: './rents/' + id,
             method: 'POST',
-            success: () => location.reload()
+            success: () => {
+                location.reload()
+            }
         })
     }
 </script>

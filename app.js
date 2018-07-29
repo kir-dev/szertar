@@ -8,6 +8,7 @@ var bodyparser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var requestlogger = require('./middlewares/generic/logRequest');
+var SSE = require('express-sse')
 
 // route require
 var main = require('./routes/main');
@@ -32,10 +33,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // passport
+sessionStore = new session.MemoryStore()
 app.use(session({
   secret: config.sessionSecret,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: sessionStore
 }));
 
 app.use(passport.initialize());
@@ -53,23 +56,34 @@ app.use(function (req, res, next) {
   return next();
 });
 
+// SSE
+var requireAdmin = require('./middlewares/user/requireAdmin');
+var requireAuth = require('./middlewares/user/requireAuthentication')
+var sendMail = require('./middlewares/generic/sendMail')
+adminSSE = new SSE()
+userSSE = new SSE()
+app.get('/adminSSE', requireAdmin(), adminSSE.init)
+app.get('/userSSE', requireAuth, userSSE.init)
+
+app.get('/test', sendMail('Test message', '<b> Test message </b>'), function(req, res){
+    adminSSE.send({title: 'Admin', body: 'Body'})
+    userSSE.send({title: 'User', body: 'Body'})
+    sessionStore.all((err, res) => console.log(res))
+    res.end()
+})
+
 var objectRepository = require('./models/objectRepository')
 var rentModel = objectRepository.rentModel
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
   res.locals.active = req.url.split('/');
-  rentModel.find({state: 1}, (err, newRent) => {
-    if(err) return next(err)
-    res.locals.newRents = newRent.length
-    res.newRent = newRent.length
-    return next()
-  })
-});
-
-app.locals.adminConnections = {}
-app.locals.userConnections = {}
-var sse = require('./middlewares/user/sse')
-app.use(sse)
+  if(req.user && req.user.isAdmin && res.locals.active[1] == 'admin') {
+    rentModel.find().or([{state: 1}, {state: 3}]).exec((err, rents)=>{
+      res.locals.newRents = rents.length
+      return next()
+    })
+  }else return next()
+})
 
 // routes
 app.use('/', main);

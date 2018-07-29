@@ -5,7 +5,7 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <h2>Felhasználók</h2>
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                     <caption>Felhasználók</caption>    
                     <thead>
                         <tr>
@@ -19,10 +19,10 @@
                     <tbody>
                         <% for(var i=0; i < users.length; i++) { %>
                         <tr>
-                            <td><i class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
+                            <td><i style="cursor: pointer;" class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
                             <td><span id="user<%=i%>" data-id="<%=users[i]._id%>"><%=users[i].name%></span></td>
                             <td><a href="mailto:<%=users[i].email%>"><%=users[i].email%></a></td>
-                            <td><a href="<%=users[i].phone%>"></a><%=users[i].phone%></td>
+                            <td><a href="tel:<%=users[i].phone%>"><%=users[i].phone%></a></td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="deleteUser(<%=i%>)">
                                     <i class="fas fa-trash-alt"></i>

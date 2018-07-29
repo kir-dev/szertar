@@ -10,7 +10,7 @@ function getItem(id){
 <div class="container-fluid">
     <div class="row">
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-            <% if( !rents.length || rents.every(rent => rent.state > 0) ){ %>
+            <% if(!cart || !cart.items.length){ %>
                 <div class="alert alert-warning" role="alert">
                     <h4>Nincs eszköz a kosaradban</h4>
                 </div>
@@ -18,7 +18,7 @@ function getItem(id){
             <h2>Kosár</h2>
             <form action="./cart/confirm" method="POST">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <caption>Kosár</caption>
                         <thead>
                             <tr>
@@ -28,31 +28,44 @@ function getItem(id){
                             </tr>
                         </thead>
                         <tbody>
-                            <% for(var i=0; i<rents.length; i++) { %>
-                                <% if(rents[i].isRented == true || rents[i].state > 0) continue %>
-                                <% for(var j=0; j< rents[i].items.length; j++) { %>
-                                <tr>
-                                    <td>
-                                        <%= getItem(rents[i].items[j]._id).name %>
-                                        <input name="<%= rents[i].items[j]._id%>" type="number" value="<%= rents[i].items[j].amount %>" min='1' max='<%=getItem(rents[i].items[j]._id).stock%>'>
-                                    </td>
-                                    <td><span id="<%=i%>" data-id="<%=rents[i]._id%>"><img class=".item-image" src="https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60"></span></td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" onclick="deleteRent(<%=i%>)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <% } %>
+                            <% for(var i=0; i< cart.items.length; i++) { %>
+                            <tr id="rent<%=i%>" data-id="<%=cart.items[i]._id%>">
+                                <td>
+                                    <%= getItem(cart.items[i]._id).name %>
+                                    <input name="<%= cart.items[i]._id%>" type="number" value="<%= cart.items[i].amount %>" min='1' max='<%=getItem(cart.items[i]._id).stock%>'>
+                                </td>
+                                <td><img class="item-image" src="<%= getItem(cart.items[i]._id).imgPath || 'https://placeholdit.imgix.net/~text?txtsize=10&txt=60%C3%9760&w=60&h=60' %>"></td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" onclick="deleteRentItem(<%=i%>)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
                             <% } %>
                         </tbody>
                     </table>
                 </div>
-                <input type="hidden" name="id" value="<%= rents.find(rent => !rent.state)._id  %>">
+                <input type="hidden" name="id" value="<%= cart._id  %>">
                 <button type="submit" class="btn btn-success">Véglegesít</button>
             </form>
             <% } %>
         </main>
     </div>
 </div>
+<script>
+    function deleteRentItem(i){
+        var id = $("#rent" + i).data("id");
+        $.ajax({
+            url: './cart/item/' + id,
+            method: 'DELETE',
+            success: () => {
+                if($('table tbody').children().length == 1) location.reload()
+                else {
+                    $('.inCart').text(parseInt($('.inCart').html())-parseInt($('#rent'+i+' input').val()))
+                    $('#rent'+i)[0].remove() 
+                }
+            }
+        })
+    }
+</script>
 <% include ../partials/footer %>

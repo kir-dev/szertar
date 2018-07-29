@@ -1,5 +1,4 @@
 var objectRepository = require('../../models/objectRepository');
-var itemModel = objectRepository.itemModel;
 
 module.exports = function () {
 
@@ -8,9 +7,7 @@ module.exports = function () {
         var count = req.body.count;
         var stock = req.body.stock;
         var name = req.body.name;
-        if (!req.item) {
-            return next();
-        }
+        if (!req.item) return next();
         req.item.count = parseInt(count, 10);
         req.item.name = name;
         req.item.stock = parseInt(stock, 10);

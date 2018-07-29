@@ -13,10 +13,7 @@ var RentSchema = new Schema({
     isRented: Boolean,
     isReturned: Boolean,
     items: [{
-        id: {
-            type: Schema.Types.ObjectId,
-            ref: 'Item'
-        },
+        id: {type: Schema.Types.ObjectId,ref: 'Item'},
         amount: Number
     }],
     user: {

@@ -6,7 +6,7 @@ module.exports = function () {
         console.log(req.params.id)
         rentModel.findOneAndUpdate({_id: req.params.id}, {state: 3}, function (err){
             if (err) return next(err);
-            return next();
+            return next()
         })
     };
 };

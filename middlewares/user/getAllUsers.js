@@ -5,7 +5,6 @@ var listUser = function(){
     return function(req, res, next){
         userModel.find({}, function(err, users){
             if (err) throw err
-
             req.users = users
             return next()
         })

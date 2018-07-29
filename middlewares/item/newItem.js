@@ -3,8 +3,6 @@ var itemModel = objectRepository.itemModel;
 
 var newItem = function(){
     return function(req, res, next){
-        console.log(req.file);
-        
         itemModel.create(new itemModel({
             name: req.body.item,
             count: req.body.count,

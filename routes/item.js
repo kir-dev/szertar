@@ -16,7 +16,6 @@ var sharp = require('sharp')
 
 router.post('/create', requireAdmin(), upload.single("img"), newItem(), function (req, res) {
     if(req.file) sharp(req.file.path).webp({ lossless: true }).resize(200, 200).toFile('./public/img/'+req.file.filename,(err, info) => {
-        console.log(err)
         res.redirect('/admin/items')
     })
     else

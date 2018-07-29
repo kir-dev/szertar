@@ -15,7 +15,7 @@ var UserScema = new Schema({
     phone: String,
     isAdmin: Boolean,
     inCart: Number,
-    inRents: Number
+    inRent: Number
 }, {
     timestamps: true
 });
@@ -42,7 +42,7 @@ UserScema.statics.findByAuthSchOrCreate = function (authSchUser, callback) {
             );
             newUser.phone = authSchUser.mobile
             newUser.inCart = 0
-            newUser.inRents = 0
+            newUser.inRent = 0
             newUser.save((err) => {
                 if (err) throw err;
                 return callback(null, newUser);

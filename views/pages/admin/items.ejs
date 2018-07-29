@@ -32,13 +32,13 @@
                     <figcaption class="figure-caption">Telefonnal fényképezés után feltölthető azonnal!</figcaption>
                 </figure>
             </div>
-            <div id="img" class="col-lg-3" style="display: none">
+            <div id="img" style="display: none; width: 201px;">
                 <div class="card">
-                    <img class="card-img-top img-responsive" src="https://placeholdit.imgix.net/~text?txtsize=28&txt=200%C3%97200&w=200&h=200">
+                    <div id="thumb" class="card-img-top img-responsive" style="display: inline-block; width: 200px; height: 200px; background-position: center center; background-size: cover;"></div>
                     <div class="card-body">
                         <h3>Előnézet</h3>
-                        <p class="description"> Darabszám: 10</p>
-                        <p class="description"> Készleten: 10</p>
+                        <p class="description"> Darabszám: <span id='thumb-count'></span></p>
+                        <p class="description"> Készleten: <span id='thumb-stock'></span></p>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="col-md-12">
                 <h2>Eszközök</h2>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <caption>A szertár elemei</caption>
                         <thead>
                             <tr>
@@ -130,7 +130,10 @@
         $.ajax({
             url: '/item/' + id,
             method: 'DELETE',
-            success: () => location.reload()
+            success: () => {
+                if($('table tbody').children().length == 1) location.reload()
+                else $('#item'+i).parentsUntil("tbody")[1].remove()
+            }
         })
     }
 
@@ -151,10 +154,13 @@
     }
 
     function displayAsImage(file) {
-        $("#img").show()
+        if(!file.files[0]) return $("#img").hide()
+        $('#thumb-count').text($('#db').val())
+        $('#thumb-stock').text($('#db').val())
         var imgURL = URL.createObjectURL(file.files[0])
-        $('#img img')[0].onload = () => URL.revokeObjectURL(imgURL)
-        $('#img img').attr('src', imgURL)
+        $('#thumb').ready(()=> URL.revokeObjectURL(imgURL))
+        $('#thumb').css('background-image', 'url('+imgURL+')')
+        $("#img").show()
     }
     
 </script>

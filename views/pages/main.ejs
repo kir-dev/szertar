@@ -19,10 +19,14 @@
                         <p class="description"> Darabszám: <%= item.count %></p>
                         <p class="description"> Készleten: <%= item.stock %></p>
                         <% if(!cantRent) {%>
-                        <form action="/item/rent" method="POST" class="form-inline my-2 my-lg-0">
+                        <form action="/item/rent" method="POST" class="my-2 my-lg-0">
                             <input type = "hidden" name = "itemId" value = <%= item._id %>>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"<% if(!item.stock) {%> disabled<% } %>>Kosárba</button>
-                            <input class="form-control" type="number" name="amount" value="1" min='1' max='<%=item.stock%>'>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success" type="submit"<% if(!item.stock) {%> disabled<% } %>>Kosárba</button>
+                                </div>
+                                <input class='form-control' type="number" name="amount" value="1" min='1' max='<%=item.stock%>'>
+                            </div>
                         </form>
                         <% } %>
                     </div>
