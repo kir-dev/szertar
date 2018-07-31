@@ -6,7 +6,7 @@ if(typeof(EventSource) !== "undefined") {
         var msg = JSON.parse(ev.data)
         var notification = new Notification(msg.title, {body: msg.body, icon: msg.icon || '/img/dsklogo.png'})
         notification.onclick = ()=>{
-            window.open('admin/rents', '_self')
+            window.open('./admin/rents', '_self')
             notification.close()
         }
         notification.onshow = ()=> snd.play()

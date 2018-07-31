@@ -1,7 +1,5 @@
 <% include ../partials/header %>
-<% console.log(items)
-console.log(rents)
-console.log(users)
+<%
 function getItem(id){
     return items.find(function(item){
         return item._id.toString() === id.toString()
@@ -13,6 +11,16 @@ function getUser(id){
         return user._id.toString() === id.toString()
     })
 }
+var len = 0
+function getWeekRents(){
+    var res = [0,0,0,0,0,0,0]
+    weekRents.forEach(rent =>{
+        res[new Date(rent.updatedAt).getDay()]++
+    })
+    var tmp = res.shift()
+    res.push(tmp)
+    return res
+}
 %>
 <div class="container-fluid">
     <div class="row">
@@ -21,10 +29,8 @@ function getUser(id){
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1>Irányítópult</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        This week
-                    </button>
+                    <label for="week">Hét:</label>
+                    <input id="week" type="week" class="form-control" value="<%= new Date().getFullYear()+'-W'+moment().week() %>">
                 </div>
             </div>
             <canvas class='my-4 w-100 chartjs-render-monitor' id="chart"></canvas>
@@ -41,7 +47,7 @@ function getUser(id){
                         </tr>
                     </thead>
                     <tbody>
-                        <% rents.forEach(rent => { %>
+                        <% weekRents.forEach(rent => { %>
                         <tr>
                             <td><%= new Date(rent.updatedAt).toLocaleString() %></td>
                             <td>
@@ -60,6 +66,7 @@ function getUser(id){
         </main>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" integrity="sha256-CfcERD4Ov4+lKbWbYqXD6aFM9M51gN4GUEtDhkWABMo=" crossorigin="anonymous"></script>
 <script>
 var ctx = document.getElementById("chart");
@@ -67,7 +74,7 @@ var chart = new Chart(ctx, {
     type: 'line',
     data: {
         datasets: [{
-            data: [16, 35, 72, 36, 92, 25, 30],
+            data: [<%= weekRents.days %>],
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',
@@ -79,8 +86,18 @@ var chart = new Chart(ctx, {
     options: {
         legend: {
             display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    beginAtZero: true,
+                    <% if(weekRents.rentsLen < 10){%>stepSize: 1<% } %>
+                }
+            }]
         }
     }
 })
 </script>
+
 <% include ../partials/footer %>

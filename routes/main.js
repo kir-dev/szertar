@@ -5,6 +5,8 @@ var getAllRents = require('../middlewares/item/getAllRents')
 var getAllUsers = require('../middlewares/user/getAllUsers')
 var renderMain = require('../middlewares/generic/renderMain');
 var requireAdmin = require('../middlewares/user/requireAdmin');
+var getWeekRents = require('../middlewares/item/getWeekRents')
+var moment = require('moment')
 
 /* GET home page. */
 router.get('/',
@@ -15,13 +17,15 @@ router.get('/',
 router.get('/admin',
     requireAdmin(),
     getAllItems(),
-    getAllRents(),
     getAllUsers(),
+    getWeekRents(),
     function (req, res) {
         res.render('pages/admin', {
             items: req.items,
             rents: req.rents,
-            users: req.users
+            users: req.users,
+            weekRents: req.weekRents,
+            moment: moment
         });
     });
 

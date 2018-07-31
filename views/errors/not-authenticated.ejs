@@ -1,5 +1,16 @@
 <% include ../partials/header %>
-<p>
-    Error not logged in!
-</p>
+<div class="container-fluid">
+    <div class="row">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="alert alert-warning" role="alert">
+                <h4>
+                    Kérlek az oldal használatához jelentkez be!
+                </h4>
+            </div>
+            <form action="/auth/login" method="POST" class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Bejelentkezés AuthSCH-val</button>
+            </form>
+        </main>
+    </div>
+</div>
 <% include ../partials/footer %>

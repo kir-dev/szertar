@@ -11,6 +11,7 @@ module.exports = function(){
                     if(!res) rentModel.findOneAndUpdate({user: req.user._id, state: 0}, {$push: {items: {_id: req.body.itemId, amount: req.body.amount }}}, (err, res) => {})
                     req.user.inCart += parseInt(req.body.amount)
                     req.user.save()
+                    return next()
                 })
             }else{
                 rentModel.create(new rentModel({
@@ -22,9 +23,9 @@ module.exports = function(){
                 }), function(err, res){
                     req.user.inCart = req.body.amount
                     req.user.save()
+                    return next()
                 })
             }
         })
-        return next()
     }
 }

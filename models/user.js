@@ -14,8 +14,8 @@ var UserScema = new Schema({
     email: String,
     phone: String,
     isAdmin: Boolean,
-    inCart: Number,
-    inRent: Number
+    inCart: {type: Number, min: 0},
+    inRent: {type: Number, min: 0}
 }, {
     timestamps: true
 });

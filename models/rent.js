@@ -9,12 +9,12 @@ var RentSchema = new Schema({
         type: ObjectId,
         default: () => new mongoose.Types.ObjectId()
     },
-    state: Number,
+    state: {type: Number, min: 0},
     isRented: Boolean,
     isReturned: Boolean,
     items: [{
-        id: {type: Schema.Types.ObjectId,ref: 'Item'},
-        amount: Number
+        id: {type: Schema.Types.ObjectId, ref: 'Item'},
+        amount: {type: Number, min: 0}
     }],
     user: {
         type: Schema.Types.ObjectId,

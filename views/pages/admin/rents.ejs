@@ -100,8 +100,9 @@ function getState(state){
             success: () => {
                 if($('table tbody').children().length == 1) location.reload()
                 else {
-                    $('.newRents').text(parseInt($('.newRents').html())-1)
-                    $('#rent'+i)[0].remove() 
+                    var tmp = ($('.newRents').html())-1
+                    $('.newRents').text(parseInt((!tmp) ? '' : tmp))
+                    $('#rent'+i)[0].remove()
                 }
             }
         })
