@@ -18,9 +18,9 @@
                     </thead>
                     <tbody>
                         <% for(var i=0; i < users.length; i++) { %>
-                        <tr>
-                            <td><i style="cursor: pointer;" class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
-                            <td><span id="user<%=i%>" data-id="<%=users[i]._id%>"><%=users[i].name%></span></td>
+                        <tr id="user<%=i%>" data-id="<%=users[i]._id%>" <% if(users[i]._id.toString() == user._id.toString()){%>data-me='true'<%}%>>
+                            <td><i onclick="makeAdmin(<%=i%>)" style="cursor: pointer;" class="fas <%if(users[i].isAdmin) { %>fa-check text-success<% }else{ %>fa-times text-danger<% } %>"></i></td>
+                            <td><%=users[i].name%></td>
                             <td><a href="mailto:<%=users[i].email%>"><%=users[i].email%></a></td>
                             <td><a href="tel:<%=users[i].phone%>"><%=users[i].phone%></a></td>
                             <td>
@@ -39,10 +39,24 @@
 <script>
     function deleteUser(i){
         var id = $("#user" + i).data("id");
+        var me = $("#user" + i).data("me")
+        if(me && !confirm('Törölnéd magad?')) return
         $.ajax({
             url: './users/' + id,
             method: 'DELETE',
             success: () => location.reload()
+        })
+    }
+    function makeAdmin(i){
+        var id = $("#user" + i).data("id")
+        var me = $("#user" + i).data("me")
+        if(me && !confirm('Nem akarsz már admin lenni?')) return
+        $.ajax({
+            url: './users/' + id,
+            method: 'POST',
+            success: () => {
+                location.reload()
+            }
         })
     }
 </script>

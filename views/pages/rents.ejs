@@ -15,12 +15,18 @@ function getState(state){
             return "Kiadásra vár"
             break
         case 2:
-            return "Kiadva"
+            return "Kiadásról értesítve"
             break
         case 3:
-            return "Leadásra vár"
+            return "Kiadva"
             break
         case 4:
+            return "Leadásra vár"
+            break
+        case 5:
+            return "Leadásról értesítve"
+            break
+        case 6:
             return "Leadva"
             break
     }
@@ -57,7 +63,7 @@ function getState(state){
                                 </td>
                                
                                 <td>
-                                    <button type="button" class="btn btn-danger" onclick="returnRent(<%=i%>)" <%if(rents[i].state != 2){%>disabled<%}%>>
+                                    <button type="button" class="btn btn-danger" onclick="returnRent(<%=i%>)" <%if(rents[i].state != 3){%>disabled<%}%>>
                                         <i class="fas fa-archive"></i>
                                     </button>
                                 </td>

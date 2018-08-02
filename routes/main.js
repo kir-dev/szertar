@@ -14,6 +14,21 @@ router.get('/',
     renderMain()
 );
 
+router.get('/admin/chart/:week',
+    requireAdmin(),
+    getAllItems(),
+    getAllUsers(),
+    getWeekRents(),
+    function (req, res) {
+        res.render('pages/admin', {
+            items: req.items,
+            rents: req.rents,
+            users: req.users,
+            weekRents: req.weekRents,
+            moment: moment
+        });
+    });
+
 router.get('/admin',
     requireAdmin(),
     getAllItems(),

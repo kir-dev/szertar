@@ -41,10 +41,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="container" hidden>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card">
+                                <img class="card-img-top img-responsive" src="/img/48f0c96309670e6a45a086fc35acd404">
+                                <div class="card-body">
+                                    <h3>Előnézet</h3>
+                                    <p class="description"> Darabszám: <span id='thumb-count'></span></p>
+                                    <p class="description"> Készleten: <span id='thumb-stock'></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2>Eszközök</h2>
             </div>
             <% if(items.length){ %>
             <div class="col-md-12">
-                <h2>Eszközök</h2>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
                         <caption>A szertár elemei</caption>
@@ -158,7 +172,22 @@
         $('#thumb-count').text($('#db').val())
         $('#thumb-stock').text($('#db').val())
         var imgURL = URL.createObjectURL(file.files[0])
-        $('#thumb').ready(()=> URL.revokeObjectURL(imgURL))
+        
+        var reader = new FileReader()
+        reader.onload = function (e) {
+            var dataURL = e.target.result,
+            c = document.querySelector('canvas'),
+            ctx = c.getContext('2d'),
+            img = new Image()
+
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, 400, 400);
+            }
+            img.src = dataURL
+        }
+        reader.readAsDataURL(file.files[0])
+
+        //$('#thumb').ready(()=> URL.revokeObjectURL(imgURL))
         $('#thumb').css('background-image', 'url('+imgURL+')')
         $("#img").show()
     }

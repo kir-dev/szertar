@@ -24,22 +24,24 @@ UserScema.statics.findByAuthSchOrCreate = function (authSchUser, callback) {
     this.findOne({
         authSchId: authSchUser.internal_id
     }, (err, user) => {
-        if (err)
-            return callback(err);
-
+        if (err) return callback(err);
+        var isAdmin = authSchUser.eduPersonEntitlement.some(
+            (obj) => {
+                return (obj.id == 106 || obj.id == 164) && obj.status.length > 0 //106-Kir-Dev, 164-DSK
+            }
+        )
         if (user) {
+            if(!user.isAdmin && isAdmin) {
+                user.isAdmin = true
+                user.save()
+            }
             return callback(null, user);
         } else {
             var newUser = new User();
-
             newUser.name = authSchUser.displayName;
             newUser.authSchId = authSchUser.internal_id;
             newUser.email = authSchUser.mail;
-            newUser.isAdmin = authSchUser.eduPersonEntitlement.some(
-                (obj) => {
-                    return (obj.id == 106 || obj.id == 164) && obj.status.length > 0; //106-Kir-Dev, 164-DSK
-                }
-            );
+            newUser.isAdmin = isAdmin
             newUser.phone = authSchUser.mobile
             newUser.inCart = 0
             newUser.inRent = 0

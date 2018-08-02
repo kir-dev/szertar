@@ -21,13 +21,35 @@ function getState(state){
             return '<i class="fas fa-warehouse"></i>Kiadásra vár'
             break
         case 2:
-            return '<i class="fas fa-long-arrow-alt-left"></i>Kiadva'
+            return '<i class="fas fa-long-arrow-alt-left"></i>Kiadásról értesítve'
             break
         case 3:
-            return '<i class="fas fa-long-arrow-alt-right"></i>Leadásra vár'
+            return '<i class="fas fa-long-arrow-alt-right"></i>Kiadva'
             break
         case 4:
+            return '<i class="fas fa-archive"></i>Leadásra vár'
+            break
+        case 5:
+            return '<i class="fas fa-archive"></i>Leadásról értesítve'
+            break
+        case 6:
             return '<i class="fas fa-archive"></i>Leadva'
+            break
+    }
+}
+function getStateConfirm(state){
+    switch(state){
+        case 1:
+            return 'Értesít'
+            break
+        case 2:
+            return 'Kiad'
+            break
+        case 4:
+            return 'Értesít'
+            break
+        case 5:
+            return 'Lead'
             break
     }
 }
@@ -38,11 +60,11 @@ function getState(state){
         <% include ../../partials/sidebar %>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <% if( !rents.length || !items.length || rents.every((rent) => rent.state == 0) ){ %>
+            <h2>Kölcsönzések</h2>
             <div class="alert alert-warning" role="alert">
                 <h4>Egyetlen kölcsönzés sem található!</h4>
             </div>
             <% } else { %>
-            <h2>Kölcsönzések</h2>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <caption>Felhasználók kölcsönzései</caption>
@@ -60,7 +82,7 @@ function getState(state){
                     <tbody>
                         <% for(var i=0; i<rents.length; i++) { %>
                             <% if(!rents[i].state) continue %>
-                            <tr id="rent<%=i%>" data-id="<%=rents[i]._id%>">
+                            <tr id="rent<%=i%>" data-id="<%=rents[i]._id%>" data-state="<%=rents[i].state%>">
                                 <td><%- getState(rents[i].state) %></td>
                                 <td>
                                 <% for(var j=0; j< rents[i].items.length; j++) { %>
@@ -69,12 +91,12 @@ function getState(state){
                                 </td>
                                 <td><%= getUser(rents[i].user).name %></td>
                                 <% var date = new Date(rents[i].updatedAt) %>
-                                <td><a href="mailto:<%=encodeURI(getUser(rents[i].user).email+'?subject=[SCH Szertár] Kölcsönzéssel kapcsolatos információ&body=Kedves '+getUser(rents[i].user).name+'!\n\nA '+date.toLocaleDateString()+' '+date.getHours()+':'+date.getMinutes()+'-kor leadott kölcsönzésedet !EKKOR! veheted át\n\nÜdvözlettel:\nSCH Szertár')%>"><%= getUser(rents[i].user).email %></a></td>
+                                <td><a target='_blank' href="mailto:<%=encodeURI(getUser(rents[i].user).email+'?subject=[SCH Szertár] Kölcsönzéssel kapcsolatos információ&body=Kedves '+getUser(rents[i].user).name+'!\n\nA '+date.toLocaleDateString()+' '+date.getHours()+':'+date.getMinutes()+'-kor leadott kölcsönzésedet !EKKOR!'+ ((rents[i].state == 4) ? ' adhatod le' : ' veheted át') +'\n\nÜdvözlettel:\nSCH Szertár')%>"><%= getUser(rents[i].user).email %></a></td>
                                 <td><a href="tel:<%= getUser(rents[i].user).phone %>"><%= getUser(rents[i].user).phone %></a></td>
                                 <td>
-                                    <button type="button" class="btn btn-success" onclick="approveRent(<%=i%>)" <% if(rents[i].state % 2 == 0) { %> disabled <% } %>>
+                                    <button type="button" class="btn btn-success" onclick="approveRent(<%=i%>)" <% if(rents[i].state == 3 || rents[i].state == 6) { %> disabled <% } %>>
                                         <i class="fas fa-check"></i>
-                                        <% if(rents[i].state == 1) { %> Kiad<% }else if(rents[i].state == 3){ %> Leadás elfogadása<% } %>
+                                        <%= getStateConfirm(rents[i].state) %>
                                     </button>
                                 </td>
                                 <td>
@@ -94,14 +116,17 @@ function getState(state){
 <script>
     function deleteRent(i){
         var id = $("#rent" + i).data("id");
+        var state = $("#rent" + i).data("state")
         $.ajax({
             url: './rents/' + id,
             method: 'DELETE',
             success: () => {
                 if($('table tbody').children().length == 1) location.reload()
                 else {
-                    var tmp = ($('.newRents').html())-1
-                    $('.newRents').text(parseInt((!tmp) ? '' : tmp))
+                    if(state == 1){
+                        var tmp = ($('.newRents').html())-1
+                        $('.newRents').text(parseInt((!tmp) ? '' : tmp))
+                    }
                     $('#rent'+i)[0].remove()
                 }
             }

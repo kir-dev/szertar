@@ -22,6 +22,7 @@ module.exports = function(txt, html, subj = '', ){
                 return next()
             }
             console.log('Message %s sent: %s', info.messageId, info.response)
+            if(!next) return
             return next()
         })
     }

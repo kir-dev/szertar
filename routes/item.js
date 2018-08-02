@@ -15,7 +15,7 @@ var upload = multer({ dest: './upload/' })
 var sharp = require('sharp')
 
 router.post('/create', requireAdmin(), upload.single("img"), newItem(), function (req, res) {
-    if(req.file) sharp(req.file.path).webp({ lossless: true }).resize(200, 200).toFile('./public/img/'+req.file.filename,(err, info) => {
+    if(req.file) sharp(req.file.path).webp({quality: 100}).resize(400, 400).toFile('./public/img/'+req.file.filename,(err, info) => {
         res.redirect('/admin/items')
     })
     else

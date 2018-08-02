@@ -1,12 +1,15 @@
 <% include ../partials/header %>
-<div class="container-fluid">
-    <div class="row">
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+<div class="container">
+    <div class="row justify-content-center">
+        <main role="main" class="px-2">
             <div class="alert alert-danger" role="alert">
                 <h4>
                     Az oldal használatához nem rendelkezel elég jogosultsággal!
                 </h4>
             </div>
+            <form action="/auth/login" method="POST" class="form-inline">
+                <button class="btn-lg btn-warning" type="submit">Panic button</button>
+            </form>
         </main>
     </div>
 </div>

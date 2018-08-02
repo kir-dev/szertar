@@ -4,18 +4,26 @@ var userModel = objectRepository.userModel
 
 module.exports = function () {
     return function (req, res, next) {
-        rentModel.findOneAndUpdate({_id: req.body.id, state: 0}, {state: 1}, function (err, rent){
+        rentModel.findOne({_id: req.body.id, state: 0, user: req.user._id}).populate({path: 'items._id', model: 'Item'}).exec(function (err, rent){
             if (err) return next(err)
-            rent.items.forEach(item => {
-                item.amount = req.body[item._id]
+            var error = false
+            rent.items.some(item => {
+                var tmp = parseInt(req.body[item._id._id])
+                console.log('tmp: %s item: %s', tmp, item._id.stock)
+                if(tmp > item._id.stock) {
+                    error = true
+                    return true
+                }else{
+                    item.amount = tmp
+                    return false
+                }
             })
+            if(error) return next()
+            rent.state = 1
             rent.save()
-            req.user.inRent++
-            req.user.inCart = 0
-            req.user.save()
             var text = {title: 'Új kölcsönzés', body: req.user.name+' kölcsönözne'}
             adminSSE.send(text)
+            return next()
         })
-        return next()
     }
 }

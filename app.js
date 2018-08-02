@@ -49,12 +49,19 @@ if (config.logrequests) {
   app.use(requestlogger.logrequest());
 }
 
-
 app.use(function (req, res, next) {
   res.tpl = {};
   res.tpl.error = {};
   return next();
 });
+
+app.use('/adminRes', (req, res, next) => {
+  if(req.user && req.isAuthenticated() && req.user.isAdmin){
+    next()
+  }else{
+    res.status(401).end()
+  }
+}, express.static(path.join(__dirname, 'admin')))
 
 // SSE
 var requireAdmin = require('./middlewares/user/requireAdmin');
@@ -65,24 +72,42 @@ userSSE = new SSE()
 app.get('/adminSSE', requireAdmin(), adminSSE.init)
 app.get('/userSSE', requireAuth, userSSE.init)
 
-app.get('/test', sendMail('Test message', '<b> Test message </b>'), function(req, res){
+app.get('/test', function(req, res){
     adminSSE.send({title: 'Admin', body: 'Body'})
     userSSE.send({title: 'User', body: 'Body'})
     sessionStore.all((err, res) => console.log(res))
     res.end()
-})
+}, sendMail('Test message', '<b> Test message </b>'))
 
 var objectRepository = require('./models/objectRepository')
 var rentModel = objectRepository.rentModel
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
   res.locals.active = req.url.split('/');
-  if(req.user && req.user.isAdmin && res.locals.active[1] == 'admin') {
-    rentModel.find().or([{state: 1}, {state: 3}]).exec((err, rents)=>{
-      res.locals.newRents = rents.length
-      return next()
-    })
-  }else return next()
+  res.locals.newRents = null
+  if(req.user){
+    if(req.user.isAdmin && res.locals.active[1] == 'admin') {
+      rentModel.find().or([{state: 1}, {state: 4}]).exec((err, rents)=>{
+        res.locals.newRents = rents.length
+        next()
+      })
+    }else {
+      rentModel.findOne({user: req.user._id, state: 0}, (err, cart) => {
+        req.user.inCart = 0
+        if(cart && cart.items.length){
+          cart.items.forEach(item => {
+            req.user.inCart += item.amount
+          })
+        }
+        rentModel.find({user: req.user._id, state: {$gte: 1}}, (err, rents) => {
+          req.user.inRent = 0
+          if(rents) req.user.inRent = rents.length
+          req.user.save()
+          next()
+        })
+      })
+    }
+  }else next()
 })
 
 // routes

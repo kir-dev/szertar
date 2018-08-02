@@ -4,16 +4,12 @@ var passport = require('passport');
 
 require('../config/passport')();
 
-router.post('/login', (req, res, next) => {
-    return next()
-},
-    passport.authenticate('oauth2')
-);
+router.post('/login', passport.authenticate('oauth2'))
 
 router.get('/authsch/callback', passport.authenticate('oauth2', {
         failureRedirect: '/auth/login'
     }), (req, res) => {
-        res.redirect(req.headers.referer)
+        res.redirect('back')
     }
 )
 router.get('/logout', function (req, res) {

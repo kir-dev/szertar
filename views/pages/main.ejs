@@ -1,19 +1,21 @@
 <% include ../partials/header %>
-<% var cantRent = !(itemRows.length) || itemRows[0].every((item) => {return !(item.stock)}) %>
+<% var cantRent = !(itemRows.length) || itemRows.every(row => {return row.every(item => {return !item.stock})})%>
+<% var rown = 0 %>
 
 <div class="container">
 <% if( cantRent ){ %>
 <div class="alert alert-warning" role="alert">
-    <h4>Egyetlen eszköz sem kölcsönözhető!</h4>
+    <h3>Egyetlen eszköz sem kölcsönözhető!</h3>
     <p>Kérlek próbáld később újra</p>
 </div>
 <% } %>
 <% itemRows.forEach(row => { %>
     <div class="row">
+        <a id="<%= rown %>" ></a>
         <% row.forEach(item => { %>
             <div class="col-sm-6 col-md-4">
                 <div class="card">
-                    <img class="card-img-top img-responsive" src="<%= item.imgPath || 'https://placeholdit.imgix.net/~text?txtsize=28&txt=200%C3%97200&w=200&h=200' %>" >
+                    <img class="card-img-top img-responsive" src="<%= item.imgPath || 'https://placeholdit.imgix.net/~text?txtsize=28&txt=400%C3%97400&w=400&h=400' %>" >
                     <div class="card-body">
                         <h3 class="card-title"><%= item.name %></h3>
                         <p class="description"> Darabszám: <%= item.count %></p>
@@ -27,6 +29,7 @@
                                     <button class="btn btn-outline-success" type="submit"<% if(!item.stock) {%> disabled<% } %>>Kosárba</button>
                                 </div>
                                 <input class='form-control' type="number" name="amount" value="1" min='1' max='<%=item.stock%>' <% if(!item.stock) {%> disabled<% } %>>
+                                <input type="hidden" name="row" value="<%= rown %>">
                             </div>
                         </form>
                         <% } %>
@@ -36,6 +39,7 @@
             </div>
         <% }); %>
     </div>
+    <% rown++ %>
 <% }); %>
 </div>
 

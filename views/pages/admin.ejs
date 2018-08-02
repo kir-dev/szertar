@@ -25,15 +25,20 @@ function getWeekRents(){
 <div class="container-fluid">
     <div class="row">
         <% include ../partials/sidebar %>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main role="main" class="col-md-9 col-lg-8 ml-sm-auto mr-lg-auto px-3 px-sm-2">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1>Irányítópult</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <label for="week">Hét:</label>
-                    <input id="week" type="week" class="form-control" value="<%= new Date().getFullYear()+'-W'+moment().week() %>">
+                    <label for="week">Hét: találat(<%= weekRents.rentsLen%>)</label>
+                    <input id="week" type="week" class="form-control" value="<%= (weekRents.week) ? weekRents.week : new Date().getFullYear()+'-W'+moment().week() %>" onchange="loadWeek()">
                 </div>
             </div>
             <canvas class='my-4 w-100 chartjs-render-monitor' id="chart"></canvas>
+            <% if(!weekRents.length) {%>
+            <div class="alert alert-warning" role="alert">
+                <h4>Egyetlen kölcsönzés sem található!</h4>
+            </div>
+            <% }else{%>
             <h2>Kölcsönzések</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
@@ -63,6 +68,7 @@ function getWeekRents(){
                     </tbody>
                 </table>
             </div>
+            <% } %>
         </main>
     </div>
 </div>
@@ -98,6 +104,10 @@ var chart = new Chart(ctx, {
         }
     }
 })
+function loadWeek(){
+    console.log('change!')
+    window.open('/admin/chart/'+$('#week').val(), '_self')
+}
 </script>
 
 <% include ../partials/footer %>

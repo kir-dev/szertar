@@ -6,9 +6,7 @@ module.exports = function () {
         itemModel.findByIdAndRemove(
            req.params.id
         , function (err) {
-            if (err) {
-                return next(err);
-            }           
+            if (err) return next(err);        
             return next();
         });
     };
