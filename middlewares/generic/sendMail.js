@@ -1,29 +1,29 @@
 var nodeMailer = require('nodemailer')
-var transporter = nodeMailer.createTransport({
-    port: 1025,
-    ignoreTLS: true,
-    host: 'localhost'
-})
 
-module.exports = function(txt, html, subj = '', ){
+module.exports = function(txt, html, subj = '', to=''){
     return function(req, res, next){
+        var transporter = nodeMailer.createTransport({
+            port: 1025,
+            ignoreTLS: true,
+            host: 'localhost'
+        })
         var mailOptions = {
-            from: '"SCH Szertár" <xx@gmail.com>', // sender address
+            from: '"SCH Szertár" <noreply@example.com>', // sender address
             to: 'Test <noreply@example.com>', // list of receivers
             subject: '[SCH Szertár] '+subj, // Subject line
             text: txt, // plain text body
             html: html // html body
         }
-        console.log('==nodemailer')
         transporter.sendMail(mailOptions, (err, info) => {
             if(err){
-                if(!next) return
                 console.log(err)
-                return next()
+                if(!next) return
+                else return next()
             }
+            console.log('==nodemailer')
             console.log('Message %s sent: %s', info.messageId, info.response)
             if(!next) return
-            return next()
+            else return next()
         })
     }
 }

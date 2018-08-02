@@ -2,23 +2,31 @@
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="/admin" class="nav-link <% if(!active[2]){ %> active <% } %>">
-                    Irányítópult
+                <a href="/admin" class="nav-link <% if(!active[2] || active[2] === 'chart'){ %> active <% } %>">
+                    <h4>
+                        Összegzés
+                    </h4>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="/admin/rents" class="nav-link <% if(active[2] === 'rents'){ %> active <% } %>">
-                    Kölcsönzések
+                    <h4>
+                        Kölcsönzések
+                    </h4>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="/admin/items" class="nav-link <% if(active[2] === 'items'){ %> active <% } %>">
-                    Eszközök
+                    <h4>
+                        Eszközök
+                    </h4>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="/admin/users" class="nav-link <% if(active[2] === 'users'){ %> active <% } %>">
-                    Felhasználók
+                    <h4>
+                        Felhasználók
+                    </h4>
                 </a>
             </li>
         </ul>

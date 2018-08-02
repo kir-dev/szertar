@@ -14,7 +14,8 @@ if(typeof(EventSource) !== "undefined" && Notification.permission === "granted")
         }
         notification.onshow = ()=> {
             snd.play()
-            $('.newRents').text(parseInt($('.newRents').html())+1)
+            if($('.newRents').text()) $('.newRents').text(parseInt($('.newRents').html())+1)
+            else $('.newRents').text(parseInt(1))
         }
     }
 }

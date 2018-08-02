@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
 var getItem = require('../middlewares/item/getItem');
 var newItem = require('../middlewares/item/newItem');
 var editItem = require('../middlewares/item/editItem');
@@ -31,6 +30,6 @@ router.delete('/:id', requireAdmin(), deleteItem(), function (req, res) {
 });
 
 router.post('/rent', requireAuth, rentItem(), function(req, res){
-    res.redirect('/')
+    res.redirect('/#'+req.body.row)
 });
 module.exports = router;

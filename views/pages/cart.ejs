@@ -7,12 +7,12 @@ function getItem(id){
 }
 %>
 
-<div class="container-fluid">
-    <div class="row">
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+<div class="container">
+    <div class="row justify-content-center">
+        <main role="main" class="col-md-10 px-2">
             <% if(!cart || !cart.items.length){ %>
                 <div class="alert alert-warning" role="alert">
-                    <h4>Nincs eszköz a kosaradban</h4>
+                    <h4 class="text-center">Nincs eszköz a kosaradban</h4>
                 </div>
             <% } else { %>
             <h2>Kosár</h2>
@@ -46,7 +46,12 @@ function getItem(id){
                     </table>
                 </div>
                 <input type="hidden" name="id" value="<%= cart._id  %>">
-                <button type="submit" class="btn btn-success">Véglegesít</button>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-success w-50">Véglegesít</button>
+                    </div>
+                </div>
             </form>
             <% } %>
         </main>

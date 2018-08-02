@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyparser = require('body-parser');
 var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session)
 var passport = require('passport');
 var requestlogger = require('./middlewares/generic/logRequest');
 var SSE = require('express-sse')
@@ -33,12 +34,28 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // passport
-sessionStore = new session.MemoryStore()
+var store = new MongoDBStore(
+  {
+    uri: config.mongo.path,
+    databaseName: 'szertar',
+    collection: 'sessions'
+  },
+  function(error) {
+    // Should have gotten an error
+  })
+ 
+store.on('error', function(error) {
+  // Also get an error here
+})
+
 app.use(session({
   secret: config.sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  resave: true,
+  saveUninitialized: true,
+  store: store
 }));
 
 app.use(passport.initialize());
@@ -72,12 +89,11 @@ userSSE = new SSE()
 app.get('/adminSSE', requireAdmin(), adminSSE.init)
 app.get('/userSSE', requireAuth, userSSE.init)
 
-app.get('/test', function(req, res){
+app.get('/test', function(req, res, next){
     adminSSE.send({title: 'Admin', body: 'Body'})
     userSSE.send({title: 'User', body: 'Body'})
-    sessionStore.all((err, res) => console.log(res))
-    res.end()
-}, sendMail('Test message', '<b> Test message </b>'))
+    next()
+}, sendMail('Test message', '<b> Test message </b>'), (req, res)=> res.end())
 
 var objectRepository = require('./models/objectRepository')
 var rentModel = objectRepository.rentModel
