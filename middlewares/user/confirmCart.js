@@ -9,7 +9,6 @@ module.exports = function () {
             var error = false
             rent.items.some(item => {
                 var tmp = parseInt(req.body[item._id._id])
-                console.log('tmp: %s item: %s', tmp, item._id.stock)
                 if(tmp > item._id.stock) {
                     error = true
                     return true

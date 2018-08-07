@@ -124,8 +124,8 @@ function getStateConfirm(state){
                 if($('table tbody').children().length == 1) location.reload()
                 else {
                     if(state == 1 || state == 4){
-                        var tmp = ($('.newRents').html())-1
-                        $('.newRents').text(parseInt((!tmp) ? '' : tmp))
+                        var tmp = $('.newRents').html()-1
+                        $('.newRents').text((!tmp) ? '' : tmp)
                     }
                     $('#rent'+i)[0].remove()
                 }

@@ -99,6 +99,7 @@ var objectRepository = require('./models/objectRepository')
 var rentModel = objectRepository.rentModel
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
+  res.locals.url = req.url
   res.locals.active = req.url.split('/');
   res.locals.newRents = null
   if(req.user){

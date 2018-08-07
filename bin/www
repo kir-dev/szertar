@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('szertar-redo:server');
+var debug = require('debug')('szertar:server');
 var http = require('http');
 var config = require('../config/config')
 
@@ -88,5 +88,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log("✔ Express server listening on port %d in %s mode", app.get('port') || 8000, app.get('env'));
+  console.log("✔ Express server listening on port %d in %s mode", app.get('port'), app.get('env'));
 }

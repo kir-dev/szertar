@@ -3,7 +3,6 @@ var rentModel = objectRepository.rentModel;
 
 module.exports = function () {
     return function (req, res, next) {
-        console.log(req.params.id)
         rentModel.findOneAndUpdate({_id: req.params.id, state: 3}, {state: 4}, function (err, res){
             if (err || !res) return next(err);
             var text = {title: 'Eszköz leadás', body: req.user.name+' eszközt adna le'}

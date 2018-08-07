@@ -124,6 +124,7 @@
             </ul>
         <% } else { %>
             <form action="/auth/login" method="POST" class="form-inline my-2 my-lg-0">
+                <input type="hidden" name="referer" value="<%=url%>">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Bejelentkezés AuthSCH-val</button>
             </form>
         <% } %>

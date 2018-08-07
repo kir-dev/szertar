@@ -8,6 +8,7 @@
                 </h4>
             </div>
             <form action="/auth/login" method="POST" class="form-inline">
+                <input type="hidden" name="referer" value="<%=url%>">
                 <button class="btn-lg btn-success" type="submit">Bejelentkezés AuthSCH-val</button>
             </form>
         </main>
