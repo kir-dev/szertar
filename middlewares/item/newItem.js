@@ -7,7 +7,7 @@ var newItem = function(){
             name: req.body.item,
             count: req.body.count,
             stock: req.body.count,
-            imgPath: (req.file) ? '/img/'+req.file.filename : ''
+            imgPath: (req.file) ? '/img/'+req.file.filename+'.png' : ''
         }), (err) => {
             if(err) next(err);
             return next();
