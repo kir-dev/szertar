@@ -1,5 +1,5 @@
 {
-  "name": "szertar-redo",
+  "name": "szertar",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,10 +11,10 @@
     "connect-mongodb-session": "^2.0.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^6.0.0",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
-    "express-sse": "^0.5.0",
     "http-errors": "~1.6.2",
     "moment": "^2.22.2",
     "mongoose": "^5.2.4",
@@ -24,7 +24,8 @@
     "passport": "^0.4.0",
     "passport-oauth2": "^1.4.0",
     "request": "^2.87.0",
-    "sharp": "^0.20.5"
+    "sharp": "^0.20.5",
+    "web-push": "^3.3.2"
   },
   "devDependencies": {}
 }

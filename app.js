@@ -1,3 +1,4 @@
+require('dotenv').load();
 var config = require('./config/config');
 var createError = require('http-errors');
 var express = require('express');
@@ -9,7 +10,11 @@ var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session)
 var passport = require('passport');
 var requestlogger = require('./middlewares/generic/logRequest');
-var SSE = require('express-sse')
+var webpush = require('web-push');
+
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
+webpush.setVapidDetails('mailto:bodnar.zsombor@gmail.com', publicVapidKey, privateVapidKey);
 
 // route require
 var main = require('./routes/main');
@@ -72,28 +77,35 @@ app.use(function (req, res, next) {
   return next();
 });
 
-app.use('/adminRes', (req, res, next) => {
-  if(req.user && req.isAuthenticated() && req.user.isAdmin){
-    next()
-  }else{
-    res.status(401).end()
-  }
-}, express.static(path.join(__dirname, 'admin')))
-
-// SSE
-var requireAdmin = require('./middlewares/user/requireAdmin');
-var requireAuth = require('./middlewares/user/requireAuthentication')
 var sendMail = require('./middlewares/generic/sendMail')
-adminSSE = new SSE()
-userSSE = new SSE()
-app.get('/adminSSE', requireAdmin(), adminSSE.init)
-app.get('/userSSE', requireAuth, userSSE.init)
-
-app.get('/test', function(req, res, next){
-    adminSSE.send({title: 'Admin', body: 'Body'})
-    userSSE.send({title: 'User', body: 'Body'})
+var requireAdmin = require('./middlewares/user/requireAdmin')
+app.get('/test', requireAdmin(), function(req, res, next){
+    const payload = JSON.stringify({ title: 'test', body: 'Test message'});
+    if(req.user.web_push.length > 0)
+    req.user.web_push.forEach(subscription => webpush.sendNotification(subscription, payload).catch(error => {
+      console.error(error.stack);
+    }))
     next()
-}, sendMail('Test message', '<b> Test message </b>'), (req, res)=> res.end())
+}, sendMail('Test message', '<b> Test message </b>', 'Test'), (req, res)=> res.end())
+
+// web-push subscribe
+app.post('/subscribe', (req, res) => {
+  const subscription = req.body;
+  console.log(subscription);
+  if(req.user.web_push.length > 0 && !req.user.web_push.some(i => i.endpoint == subscription.endpoint))
+    req.user.web_push.push(subscription)
+  else if(!req.user.web_push.length)
+    req.user.web_push.push(subscription)
+  req.user.save()
+  res.status(201).json({});
+});
+
+app.post('/unsubscribe', (req, res) => {
+  var userModel = objectRepository.userModel
+  const subscription = req.body;
+  userModel.findByIdAndUpdate(req.user._id, {$pull: {web_push: {endpoint: subscription.endpoint}}}, (err, res) => {})
+  res.status(201).json({});
+})
 
 var objectRepository = require('./models/objectRepository')
 var rentModel = objectRepository.rentModel

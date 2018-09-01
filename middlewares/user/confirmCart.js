@@ -1,6 +1,7 @@
 var objectRepository = require('../../models/objectRepository')
 var rentModel = objectRepository.rentModel
 var userModel = objectRepository.userModel
+var webpush = require('web-push')
 
 module.exports = function () {
     return function (req, res, next) {
@@ -20,8 +21,17 @@ module.exports = function () {
             if(error) return next()
             rent.state = 1
             rent.save()
-            var text = {title: 'Új kölcsönzés', body: req.user.name+' kölcsönözne'}
-            adminSSE.send(text)
+
+            const payload = JSON.stringify({title: 'Új kölcsönzés', body: req.user.name+' kölcsönözne', link: '/admin/rents'})
+            userModel.find({isAdmin: true}, (err, res) => {
+                res.forEach(admin => {
+                    if(admin.web_push.length > 0) admin.web_push.forEach(subscription => {
+                        if(subscription.endpoint) webpush.sendNotification(subscription, payload).catch(error => {
+                            console.error(error.stack);
+                        })
+                    })
+                })
+            })
             return next()
         })
     }

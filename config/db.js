@@ -8,7 +8,7 @@ db.on('error', function (error) {
 });
 
 db.once('open', function () {
-    console.log('Connected to db.');
+    console.log('✔ Connected to db.');
 });
 
 mongoose.connect(config.mongo.path, { useNewUrlParser: true }, function (err) {

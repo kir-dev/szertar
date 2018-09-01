@@ -20,6 +20,7 @@ router.get('/rents', requireAuth, getAllItems(), getAllRents(),
 
 router.post('/rents/:id', requireAuth, returnRent(), (req, res) => {
     res.status(200).end()
+    sendMail(req.user.name+' leadna!', req.user.name+' leadna!', 'Új leadás')()
 })
 
 router.get('/cart', requireAuth, getAllItems(), getCart(),

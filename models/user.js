@@ -10,6 +10,7 @@ var UserScema = new Schema({
         default: () => new mongoose.Types.ObjectId()
     },
     authSchId: String,
+    web_push: [],
     name: String,
     email: String,
     phone: String,
