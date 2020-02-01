@@ -1,4 +1,4 @@
-require('dotenv').load();
+require('dotenv').config()
 var config = require('./config/config');
 var createError = require('http-errors');
 var express = require('express');
@@ -45,11 +45,11 @@ var store = new MongoDBStore(
     databaseName: 'szertar',
     collection: 'sessions'
   },
-  function(error) {
+  function (error) {
     // Should have gotten an error
   })
- 
-store.on('error', function(error) {
+
+store.on('error', function (error) {
   // Also get an error here
 })
 
@@ -79,22 +79,22 @@ app.use(function (req, res, next) {
 
 var sendMail = require('./middlewares/generic/sendMail')
 var requireAdmin = require('./middlewares/user/requireAdmin')
-app.get('/test', requireAdmin(), function(req, res, next){
-    const payload = JSON.stringify({ title: 'test', body: 'Test message'});
-    if(req.user.web_push.length > 0)
+app.get('/test', requireAdmin(), function (req, res, next) {
+  const payload = JSON.stringify({ title: 'test', body: 'Test message' });
+  if (req.user.web_push.length > 0)
     req.user.web_push.forEach(subscription => webpush.sendNotification(subscription, payload).catch(error => {
       console.error(error.stack);
     }))
-    next()
-}, sendMail('Test message', '<b> Test message </b>', 'Test'), (req, res)=> res.end())
+  next()
+}, sendMail('Test message', '<b> Test message </b>', 'Test'), (req, res) => res.end())
 
 // web-push subscribe
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
   console.log(subscription);
-  if(req.user.web_push.length > 0 && !req.user.web_push.some(i => i.endpoint == subscription.endpoint))
+  if (req.user.web_push.length > 0 && !req.user.web_push.some(i => i.endpoint == subscription.endpoint))
     req.user.web_push.push(subscription)
-  else if(!req.user.web_push.length)
+  else if (!req.user.web_push.length)
     req.user.web_push.push(subscription)
   req.user.save()
   res.status(201).json({});
@@ -103,7 +103,7 @@ app.post('/subscribe', (req, res) => {
 app.post('/unsubscribe', (req, res) => {
   var userModel = objectRepository.userModel
   const subscription = req.body;
-  userModel.findByIdAndUpdate(req.user._id, {$pull: {web_push: {endpoint: subscription.endpoint}}}, (err, res) => {})
+  userModel.findByIdAndUpdate(req.user._id, { $pull: { web_push: { endpoint: subscription.endpoint } } }, (err, res) => { })
   res.status(201).json({});
 })
 
@@ -114,29 +114,29 @@ app.use(function (req, res, next) {
   res.locals.url = req.url
   res.locals.active = req.url.split('/');
   res.locals.newRents = null
-  if(req.user){
-    if(req.user.isAdmin && res.locals.active[1] == 'admin') {
-      rentModel.find().or([{state: 1}, {state: 4}]).exec((err, rents)=>{
+  if (req.user) {
+    if (req.user.isAdmin && res.locals.active[1] == 'admin') {
+      rentModel.find().or([{ state: 1 }, { state: 4 }]).exec((err, rents) => {
         res.locals.newRents = rents.length
         next()
       })
-    }else {
-      rentModel.findOne({user: req.user._id, state: 0}, (err, cart) => {
+    } else {
+      rentModel.findOne({ user: req.user._id, state: 0 }, (err, cart) => {
         req.user.inCart = 0
-        if(cart && cart.items.length){
+        if (cart && cart.items.length) {
           cart.items.forEach(item => {
             req.user.inCart += item.amount
           })
         }
-        rentModel.find({user: req.user._id, state: {$gte: 1}}, (err, rents) => {
+        rentModel.find({ user: req.user._id, state: { $gte: 1 } }, (err, rents) => {
           req.user.inRent = 0
-          if(rents) req.user.inRent = rents.length
+          if (rents) req.user.inRent = rents.length
           req.user.save()
           next()
         })
       })
     }
-  }else next()
+  } else next()
 })
 
 // routes
