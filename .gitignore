@@ -1,5 +1,4 @@
 .idea
-config/config.js
 .vscode/launch.json
 public/img/*
 jsconfig.json

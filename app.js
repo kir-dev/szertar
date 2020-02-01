@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 var config = require('./config/config');
 var createError = require('http-errors');
 var express = require('express');
