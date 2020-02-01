@@ -27,5 +27,7 @@
     "sharp": "^0.24.0",
     "web-push": "^3.3.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
