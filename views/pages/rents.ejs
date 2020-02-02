@@ -1,0 +1,89 @@
+<% include ../partials/header %>
+<%
+function getItem(id){
+    return items.find(function(item){
+        return item._id.toString() === id.toString()
+    })
+}
+
+function getState(state){
+    switch(state){
+        case 0:
+            return "Kosárban"
+            break
+        case 1:
+            return "Kiadásra vár"
+            break
+        case 2:
+            return "Kiadásról értesítve"
+            break
+        case 3:
+            return "Kiadva"
+            break
+        case 4:
+            return "Leadásra vár"
+            break
+        case 5:
+            return "Leadásról értesítve"
+            break
+        case 6:
+            return "Leadva"
+            break
+    }
+}
+%>
+<div class="container">
+    <div class="row justify-content-center">
+        <main role="main" class="col-md-10 px-2">
+            <% if( !rents.length || rents.every((rent) => !rent.state) ){ %>
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="text-center">Még nem kölcsönöztél eszközt</h4>
+                </div>
+            <% } else { %>
+            <h2>Kölcsönzések</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <caption>Kölcsönzések</caption>
+                    <thead>
+                        <tr>
+                            <th>Állapot</th>
+                            <th>Eszköz</th>
+                            <th>Lead</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i=0; i<rents.length; i++) { %>
+                            <% if(!rents[i].state) continue %>
+                            <tr>
+                                <td><span id="rent<%=i%>" data-id="<%=rents[i]._id%>"><%= getState(rents[i].state) %></span></td>
+                                <td>
+                                <% for(var j=0; j< rents[i].items.length; j++) { %>
+                                    <span style="display: block"><%= getItem(rents[i].items[j]._id).name %>(<b><%= rents[i].items[j].amount %></b>)</span>
+                                <% } %>
+                                </td>
+                               
+                                <td>
+                                    <button type="button" class="btn btn-secondary" onclick="returnRent(<%=i%>)" <%if(rents[i].state != 3){%>disabled<%}%>>
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </main>
+    </div>
+</div>
+<script>
+    function returnRent(i){
+        var id = $("#rent" + i).data("id");
+        $.ajax({
+            url: './rents/' + id,
+            method: 'POST',
+            success: () => location.reload()
+        })
+    }
+</script>
+<% include ../partials/footer %>

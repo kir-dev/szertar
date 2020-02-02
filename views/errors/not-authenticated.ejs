@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+<div class="container">
+    <div class="row justify-content-center">
+        <main role="main" class="px-2">
+            <div class="alert alert-warning" role="alert">
+                <h4>
+                    Kérlek az oldal használatához jelentkez be!
+                </h4>
+            </div>
+            <form action="/auth/login" method="POST" class="form-inline">
+                <input type="hidden" name="referer" value="<%=url%>">
+                <button class="btn-lg btn-success" type="submit">Bejelentkezés AuthSCH-val</button>
+            </form>
+        </main>
+    </div>
+</div>
+<% include ../partials/footer %>

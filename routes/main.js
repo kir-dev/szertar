@@ -1,35 +1,53 @@
 var express = require('express');
 var router = express.Router();
-var renderMainMW = require('../middlewares/generic/renderMain');
-var validateRequestItemMW = require('../middlewares/item/validateRequestItem');
-var removeItemMW= require('../middlewares/item/removeItem');
-var listItemsMW = require('../middlewares/item/listItems');
-var findItemMW = require('../middlewares/item/findItem');
-var updateItemMW = require('../middlewares/item/updateItem');
+var getAllItems = require('../middlewares/item/getAllItems');
+var getAllRents = require('../middlewares/item/getAllRents')
+var getAllUsers = require('../middlewares/user/getAllUsers')
+var renderMain = require('../middlewares/generic/renderMain');
+var requireAdmin = require('../middlewares/user/requireAdmin');
+var getWeekRents = require('../middlewares/item/getWeekRents')
+var moment = require('moment')
 
-var objectRepository = require('../models/objectRepository');
+/* GET home page. */
+router.get('/',
+    getAllItems(),
+    renderMain()
+);
 
-module.exports = function () {
+router.get('/admin/chart/:week',
+    requireAdmin(),
+    getAllItems(),
+    getAllUsers(),
+    getWeekRents(),
+    function (req, res) {
+        res.render('pages/admin', {
+            items: req.items,
+            rents: req.rents,
+            users: req.users,
+            weekRents: req.weekRents,
+            moment: moment
+        });
+    });
 
-    router.get('/', 
-        listItemsMW(objectRepository),
-        renderMainMW()
-    );
+router.get('/admin',
+    requireAdmin(),
+    getAllItems(),
+    getAllUsers(),
+    getWeekRents(),
+    function (req, res) {
+        res.render('pages/admin', {
+            items: req.items,
+            rents: req.rents,
+            users: req.users,
+            weekRents: req.weekRents,
+            moment: moment
+        });
+    });
 
-    router.post('/',
-        updateItemMW(),
-        function(req, res) {
-            res.redirect('/');
-        }
-    );
+router.get('/about',
+    (req, res) => {
+        res.render('pages/about');
+    }
+);
 
-    router.post('/delete',
-        removeItemMW(objectRepository),
-        function(req, res, next) {
-            res.redirect('/');
-        }
-    );
-
-    return router;
-};
-
+module.exports = router;

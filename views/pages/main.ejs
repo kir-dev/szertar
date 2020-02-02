@@ -1,171 +1,46 @@
 <% include ../partials/header %>
-<% if (message !== undefined) { %>
-    <h3> <%= message %> </h3>
-<% } %>
+<% var cantRent = !(itemRows.length) || itemRows.every(row => {return row.every(item => {return !item.stock})})%>
+<% var rown = 0 %>
+
 <div class="container">
-    <h1>SCH szertár</h1>
-    <% if(!user){ %>
-    <a class="btn btn-success" href="/auth/login">Bejentkezés</a>
-    <% }else{ %>
-        <p> Szia, <%= user.name%>! </p>
-    <a class="btn btn-success" href="/auth/logout">Kijelentkezés</a>
-    
-        <% if(user.isAdmin){ %>
-            <p>WOW te egy admin vagy, ez oszt igen</p>
-        <% } %>
-    <% }%>
-    <div class="row">
-        <div class="col-md-5">
-            <h2>Feltöltés</h2>
-            <form method="post" action="/">
-                <fieldset>
-                    <legend>Alap adatok</legend>
-                    <label>Tárgy: </label>
-                    <select name="item" id="dropdown" onchange="changed()" autofocus>
-                        <% for(var i=0; i < items.length; i++) { %>
-                        <option value="<%= items[i].name %>"><%= items[i].name %></option>
-                        <% } %>
-                        <option value="newItem">Új hozzáadása</option>
-                    </select>
-                    <div id="newItemInputDiv"></div>
-                    <br/>
-                    <label>Elemszám: </label>
-                    <input name="count" type="text" value="1" placeholder="Darabszám" required>
-                    <br/>
-                    <input type="submit" value="Feltöltés!">
-                </fieldset>
-            </form>
-        </div>
-        <div class="col-md-5">
-            <h2>Törlés</h2>
-            <form method="post" action="/delete">
-                <fieldset>
-                    <legend>Alap adatok</legend>
-                    <label>Tárgy: </label>
-                    <select name="item" id="dropdown" onchange="changed()" autofocus>
-                        <% for(var i=0; i < items.length; i++) { %>
-                        <option value="<%= items[i].name %>"><%= items[i].name %></option>
-                        <% } %>
-                        <option value="newItem">Új hozzáadása</option>
-                    </select>
-                    <div id="newItemInputDiv"></div>
-                    <br/>
-                    <label>Elemszám: </label>
-                    <input name="count" type="text" value="1" placeholder="Darabszám" required>
-                    <br/>
-                    <input type="submit" value="Feltöltés!">
-                </fieldset>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">
-            <form>
-                <caption>Új elemhozzáadása</caption><br>
-                <label for="nev">Név:</label><input type="text" name="nev" id="nev">
-                <label for="db">Darabszám:</label><input type="number" min="0" name="count" id="db">
-                <button type="submit" class="btn btn-dark">Küldés</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <caption>A szertár elemei</caption>
-                    <thead>
-                    <th>Név</th>
-                    <th>Darabszám</th>
-                    <th>Szerkesztés</th>
-                    <th>Eltávolítás</th>
-                    </thead>
-                    <tbody>
-                    <% for(var i=0; i < items.length; i++) { %>
-                    <tr>
-                        <td><span id="item<%=i%>" data-id="<%= items[i]._id %>" data-name="<%= items[i].name %>" data-count="<%= items[i].count %>"><%= items[i].name %></span></td>
-                        <td>
-                            <button onclick="increment(<%=i%>)" class="btn btn-success">+</button>
-                            <span id="count<%=i%>"><%= items[i].count %></span>
-                            <button onclick="decrement(<%=i%>)" type="button" class="btn btn-danger">-</button>
-                        </td>
-                        <td>
-                            <button type="button" onclick="edit(<%=i%>)" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                        </td>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-    </div>
+<% if( cantRent ){ %>
+<div class="alert alert-warning" role="alert">
+    <h3>Egyetlen eszköz sem kölcsönözhető!</h3>
+    <p>Kérlek próbáld később újra</p>
 </div>
-<div class="overlay" id="edit-overlay">
-    <div class="edit overlay-content">
-        <form class="form" method="post" action="/item">
-            <legend>Szerkesztés</legend>
-            <input type="hidden" name="id" id="id">
-            <fieldset class="form-group">
-                <label for="name">Név:</label>
-                <input class="form-control" type="text" id="name" name="name">
-            </fieldset>
-            <fieldset class="form-group">
-                <label for="count">Mennyiség:</label>
-                <input class="form-control" type="number" min="0" id="count" name="count"><br>
-            </fieldset>
-
-            <div class="form-group">
-                <button class="btn btn-success">Mehet</button>
-                <button href="javascript:void(0)" class="btn btn-danger" onclick="closeNav()">Mégse</button>
+<% } %>
+<% itemRows.forEach(row => { %>
+    <div class="row">
+        <a id="<%= rown %>" ></a>
+        <% row.forEach(item => { %>
+            <div class="col-sm-6 col-md-4">
+                <div class="card">
+                    <img class="card-img-top img-responsive" src="<%= item.imgPath || 'https://placeholdit.imgix.net/~text?txtsize=28&txt=400%C3%97400&w=400&h=400' %>" >
+                    <div class="card-body">
+                        <h3 class="card-title"><%= item.name %></h3>
+                        <p class="description"> Darabszám: <%= item.count %></p>
+                        <p class="description"> Készleten: <%= item.stock %></p>
+                        <% if(!cantRent) {%>
+                        <% if(user){%>
+                        <form action="/item/rent" method="POST" class="my-2 my-lg-0">
+                            <input type = "hidden" name = "itemId" value = <%= item._id %>>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-success" type="submit"<% if(!item.stock) {%> disabled<% } %>>Kosárba</button>
+                                </div>
+                                <input class='form-control' type="number" name="amount" value="1" min='1' max='<%=item.stock%>' <% if(!item.stock) {%> disabled<% } %>>
+                                <input type="hidden" name="row" value="<%= rown %>">
+                            </div>
+                        </form>
+                        <% } %>
+                        <% } %>
+                    </div>
+                </div>
             </div>
-
-        </form>
-
-
+        <% }); %>
     </div>
+    <% rown++ %>
+<% }); %>
 </div>
-<script>
-    function increment(i) {
-        var id=$("#item"+i).data("id");
-        var adat={id:id}
-        $.ajax({
-            type: "POST",
-            url: "/item/increase",
-            data: adat,
-            context: document.body
-        }).done(function (response) {
-            $("#count"+i).text(response);
-            $("#count"+i).data(response);
-        });
-    }
-    function decrement(i) {
-        var id=$("#item"+i).data("id");
-        var adat={id:id}
-        $.ajax({
-            type: "POST",
-            url: "/item/decrease",
-            data: adat,
-            context: document.body
-        }).done(function (response) {
-            $("#count"+i).text(response);
-        });
-    }
-    function edit(i) {
-        var id = $("#item" + i).data("id");
-        var name = $("#item" + i).data("name");
-        var count = parseInt($("#item" + i).data("count"));
-        document.getElementById("edit-overlay").style.display = "block";
-        $('input[id=id]').val(id);
-        $('input[id=name]').val(name);
-        $('input[id=count]').attr('value',count);
-    }
 
-
-    function closeNav() {
-        document.getElementById("edit-overlay").style.display = "none";
-    }
-</script>
 <% include ../partials/footer %>

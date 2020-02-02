@@ -1,0 +1,34 @@
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/admin" class="nav-link <% if(!active[2] || active[2] === 'chart'){ %> active <% } %>">
+                    <h4>
+                        Összegzés
+                    </h4>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/rents" class="nav-link <% if(active[2] === 'rents'){ %> active <% } %>">
+                    <h4>
+                        Kölcsönzések
+                    </h4>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/items" class="nav-link <% if(active[2] === 'items'){ %> active <% } %>">
+                    <h4>
+                        Eszközök
+                    </h4>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/users" class="nav-link <% if(active[2] === 'users'){ %> active <% } %>">
+                    <h4>
+                        Felhasználók
+                    </h4>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

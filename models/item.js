@@ -9,9 +9,20 @@ var ItemSchema = new Schema({
         type: ObjectId,
         default: () => new mongoose.Types.ObjectId()
     },
-    name: String,
-    count: Number,
-    stock: Number,
+    name: {
+        type: String,
+        required: true
+    },
+    count: {
+        type: Number,
+        min: 0,
+        required: true
+    },
+    stock: {
+        type: Number,
+        min: 0,
+        required: true
+    },
     imgPath: String
 });
 

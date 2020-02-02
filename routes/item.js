@@ -1,31 +1,35 @@
 var express = require('express');
 var router = express.Router();
-var objectRepository = require('../models/objectRepository');
-var updateItemMW = require('../middlewares/item/updateItem');
-var findItemMW = require('../middlewares/item/findItem');
-var validateRequestItemMW = require('../middlewares/item/validateRequestItem');
-var increaseItemMW = require('../middlewares/item/increaseItem');
-var decreaseItemMW = require('../middlewares/item/decreaseItem');
+var getItem = require('../middlewares/item/getItem');
+var newItem = require('../middlewares/item/newItem');
+var editItem = require('../middlewares/item/editItem');
+var deleteItem = require('../middlewares/item/deleteItem');
+var requireAdmin = require('../middlewares/user/requireAdmin');
+var requireAuth = require('../middlewares/user/requireAuthentication');
+var rentItem = require('../middlewares/item/rentItem');
+var getAllItem = require('../middlewares/item/getAllItems');
+var renderMain = require('../middlewares/generic/renderMain');
+var multer  = require('multer')
+var upload = multer({ dest: './upload/' })
+var sharp = require('sharp')
 
-router.post('/',
-    //  validateRequestItemMW(),
-    findItemMW(objectRepository),
-    updateItemMW(objectRepository),
-    function (req, res, next) {
-        res.redirect('/');
-    }
-);
+router.post('/create', requireAdmin(), upload.single("img"), newItem(), function (req, res) {
+    if(req.file) sharp(req.file.path).png({quality: 100}).resize(400, 400).toFile('./public/img/'+req.file.filename+'.png',(err, info) => {
+        res.redirect('/admin/items')
+    })
+    else
+    res.redirect('/admin/items')
+});
 
-router.post('/increase',
-    // validateRequestItemMW(),
-    findItemMW(objectRepository),
-    increaseItemMW(objectRepository)
-);
+router.post('/edit', requireAdmin(), getItem(), editItem(), function (req, res) {
+    res.redirect('/admin/items');
+});
 
-router.post('/decrease',
-    //  validateRequestItemMW(),
-    findItemMW(objectRepository),
-    decreaseItemMW(objectRepository)
-);
+router.delete('/:id', requireAdmin(), deleteItem(), function (req, res) {
+    res.status(200).end();
+});
 
+router.post('/rent', requireAuth, rentItem(), function(req, res){
+    res.redirect('/#'+req.body.row)
+});
 module.exports = router;

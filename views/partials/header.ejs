@@ -1,15 +1,122 @@
 <!doctype html>
 <html lang="hu">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-     <title>SCH Szeretár: Főoldal</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <title><%= (user && user.isAdmin && newRents) ? '('+newRents+') ' : '' %>SCH Szertár: Főoldal</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="/">SCH Szertár</a>
+        <%# Small screen before dropdown %>
+        <ul class="nav navbar-nav d-lg-none ml-auto mr-3" style="flex-direction: row">
+            <% if(user) { %>
+            <% if(active[1] != 'admin') { %>
+            <li class="nav-item <% if(active[2] === 'cart'){ %> active <% } %>">
+                <a class="nav-link" href="/user/cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge badge-warning inCart"><%= (!user.inCart) ? '' : user.inCart %></span>
+                </a>
+            </li>
+            <li class="nav-item px-3 <% if(active[2] === 'rents' && active[1] == 'user'){ %>active<% } %>">
+                    <a class="nav-link" href="/user/rents">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span class="badge badge-warning inRent"><%= (!user.inRent) ? '' : user.inRent %></span>
+                    </a>
+            </li>
+            <% } %>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-bell js-push-btn"></i>
+                    <span class="badge badge-success"><%= (newRents && user.isAdmin) ? newRents : '' %></span>
+                </a>
+            </li>
+            <% } %>
+        </ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    <%# dropdown %>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item <% if(!active[1]){ %> active <% } %>">
+                <a class="nav-link" href="/">Eszközök
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item <% if(active[1] === 'about'){ %> active <% } %>">
+                <a class="nav-link" href="http://dsk.sch.bme.hu/kapcsolat.html">Rólunk</a>
+            </li>
+            <% if(user && user.isAdmin) { %>
+            <li class="nav-item dropdown d-lg-none <% if(active[1] === 'admin'){ %> active <% } %>">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Admin</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/admin">Admin</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/admin/rents" class="dropdown-item">Kölcsönzések</a>
+                    <a href="/admin/items" class="dropdown-item">Eszközök</a>
+                    <a href="/admin/users" class="dropdown-item">Felhasználók</a>
+                </div>
+            </li>
+            <li class="d-none d-lg-block">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='/admin'">Admin</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/rents">Kölcsönzések</a>
+                        <a class="dropdown-item" href="/admin/items">Eszközök</a>
+                        <a class="dropdown-item" href="/admin/users">Felhasználók</a>
+                    </div>
+                </div>
+            </li>
+            <% } %>
+        </ul>
+        <%# Large screen %>
+        <% if(user) { %>
+            <ul class="nav navbar-nav ml-auto">
+                <% if(active[1] != 'admin') {%>
+                <li class="nav-item d-none d-lg-block <% if(active[2] === 'cart'){ %> active <% } %>">
+                    <a class="nav-link" href="/user/cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge badge-warning inCart"><%= (!user.inCart) ? '' : user.inCart %></span>
+                    </a>
+                </li>
+                <li class="nav-item d-none d-lg-block <% if(active[2] === 'rents' && active[1] == 'user'){ %> active <% } %>">
+                        <a class="nav-link" href="/user/rents">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span class="badge badge-warning inRent"><%= (!user.inRent) ? '' : user.inRent %></span>
+                        </a>
+                </li>
+                <% } %>
+                <li class="nav-item d-none d-lg-block">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-bell js-push-btn"></i>
+                        <span class="badge badge-success"><%= (newRents && user.isAdmin) ? newRents : '' %></span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        Szia, <%= user.name %>!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/rents">Kölcsönzéseim</a>
+                        <a class="dropdown-item" href="/user/cart">Kosár</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/auth/logout">Kijelentkezés</a>
+                    </div>
+                </li>
+            </ul>
+        <% } else { %>
+            <form action="/auth/login" method="POST" class="form-inline my-2 my-lg-0">
+                <input type="hidden" name="referer" value="<%=url%>">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Bejelentkezés AuthSCH-val</button>
+            </form>
+        <% } %>
+    </div>
+</nav>
