@@ -1,11 +1,11 @@
-var itemModel = require('./item');
-var userModel = require('./user');
-var rentModel = require('./rent');
+var itemModel = require('./item')
+var userModel = require('./user')
+var rentModel = require('./rent')
 
 var objectRepository = {
-    itemModel: itemModel,
-    userModel: userModel,
-    rentModel: rentModel
-};
+  itemModel: itemModel,
+  userModel: userModel,
+  rentModel: rentModel
+}
 
-module.exports = objectRepository;
+module.exports = objectRepository
