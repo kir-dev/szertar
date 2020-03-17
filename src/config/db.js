@@ -1,6 +1,6 @@
-var mongoose = require('mongoose')
-var config = require('../config/config')
-var db = mongoose.connection
+const mongoose = require('mongoose')
+const config = require('../config/config')
+const db = mongoose.connection
 
 db.on('error', error => {
   console.log('MongoDb threw an exception: ' + error)

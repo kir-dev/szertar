@@ -1,7 +1,7 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
-var userModel = objectRepository.userModel
-var webpush = require('web-push')
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
+const userModel = objectRepository.userModel
+const webpush = require('web-push')
 
 module.exports = function() {
   return function(req, res, next) {
@@ -10,9 +10,9 @@ module.exports = function() {
       .populate({ path: 'items._id', model: 'Item' })
       .exec((err, rent) => {
         if (err) return next(err)
-        var error = false
+        let error = false
         rent.items.some(item => {
-          var tmp = parseInt(req.body[item._id._id])
+          const tmp = parseInt(req.body[item._id._id])
           if (tmp > item._id.stock) {
             error = true
             return true

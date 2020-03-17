@@ -1,8 +1,8 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
-var itemModel = objectRepository.itemModel
-var userModel = objectRepository.userModel
-var webpush = require('web-push')
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
+const itemModel = objectRepository.itemModel
+const userModel = objectRepository.userModel
+const webpush = require('web-push')
 
 module.exports = function() {
   return function(req, res, next) {
@@ -12,7 +12,9 @@ module.exports = function() {
       .exec((err, res) => {
         if (res.state === 2 || res.state === 5)
           res.items.forEach(item => {
-            var query = { stock: res.state === 2 ? -item.amount : item.amount }
+            const query = {
+              stock: res.state === 2 ? -item.amount : item.amount
+            }
             itemModel.findByIdAndUpdate(item._id._id, { $inc: query }).exec()
           })
         if (res.state === 1 || res.state === 4) {

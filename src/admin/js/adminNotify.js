@@ -6,11 +6,11 @@ if (
   typeof EventSource !== 'undefined' &&
   Notification.permission === 'granted'
 ) {
-  var adminSSE = new EventSource('/adminSSE')
-  var snd = new Audio('/snd/open-ended.mp3')
+  const adminSSE = new EventSource('/adminSSE')
+  const snd = new Audio('/snd/open-ended.mp3')
   adminSSE.onmessage = function(ev) {
-    var msg = JSON.parse(ev.data)
-    var notification = new Notification(msg.title, {
+    const msg = JSON.parse(ev.data)
+    const notification = new Notification(msg.title, {
       requireInteraction: true,
       body: msg.body,
       icon: msg.icon || '/img/dsklogo.png'

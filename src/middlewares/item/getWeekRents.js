@@ -1,12 +1,12 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
-var moment = require('moment')
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
+const moment = require('moment')
 
 moment.locale('hu')
 
 module.exports = function() {
   return function(req, res, next) {
-    var week = req.params.week || undefined
+    const week = req.params.week || undefined
     rentModel.find(
       {
         updatedAt: {
@@ -20,14 +20,10 @@ module.exports = function() {
         state: { $gte: 1 }
       },
       (err, res) => {
-        var days = [0, 0, 0, 0, 0, 0, 0]
-        var len = 0
-        res.forEach(rent => {
-          days[moment(rent.updatedAt).weekday()]++
-          len++
-        })
+        const days = [0, 0, 0, 0, 0, 0, 0]
+        res.forEach(rent => days[moment(rent.updatedAt).weekday()]++)
         req.weekRents = res
-        req.weekRents.rentsLen = len
+        req.weekRents.rentsLen = res.length
         req.weekRents.days = days
         req.weekRents.week = week
         return next()

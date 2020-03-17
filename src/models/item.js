@@ -1,10 +1,10 @@
-var mongoose = require('mongoose')
-var db = require('../config/db')
+const mongoose = require('mongoose')
+const db = require('../config/db')
 
-var Schema = mongoose.Schema,
+const Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId
 
-var ItemSchema = new Schema({
+const ItemSchema = new Schema({
   _id: {
     type: ObjectId,
     default: () => new mongoose.Types.ObjectId()
@@ -26,6 +26,6 @@ var ItemSchema = new Schema({
   imgPath: String
 })
 
-var Item = db.model('Item', ItemSchema)
+const Item = db.model('Item', ItemSchema)
 
 module.exports = Item

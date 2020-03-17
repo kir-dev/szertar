@@ -1,9 +1,9 @@
-var passport = require('passport')
-var OAuth2Strategy = require('passport-oauth2')
-var request = require('request')
+const passport = require('passport')
+const OAuth2Strategy = require('passport-oauth2')
+const request = require('request')
 
-var User = require('../models/user')
-var config = require('../config/config')
+const User = require('../models/user')
+const config = require('../config/config')
 
 module.exports = function() {
   passport.use(
@@ -20,7 +20,7 @@ module.exports = function() {
         request(
           config.oauth2.userURL + accessToken,
           (error, response, body) => {
-            var authSchUser = JSON.parse(body)
+            const authSchUser = JSON.parse(body)
             console.log(authSchUser)
             User.findByAuthSchOrCreate(authSchUser, done)
           }

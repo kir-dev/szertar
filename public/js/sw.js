@@ -1,7 +1,7 @@
 const applicationServerPublicKey =
   // eslint-disable-next-line max-len
   'BHlo1PhaPnRUKWPATl_uAAY66KXi21pRlW1tLtS38HywHCSD_QUhtpqx3oaTuwta66UD0hVua3uto9yn6GBzFy8'
-var msg
+let msg
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)

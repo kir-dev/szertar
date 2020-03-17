@@ -1,6 +1,6 @@
 const AUTH_SCH_URL = 'https://auth.sch.bme.hu'
 
-var config = {
+const config = {
   port: process.env.PORT,
   logrequests: true,
   sessionSecret: process.env.SESSION_SECRET, //sensitive

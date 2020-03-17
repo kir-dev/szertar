@@ -1,6 +1,6 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
-var itemModel = objectRepository.itemModel
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
+const itemModel = objectRepository.itemModel
 
 module.exports = function() {
   return function(req, res, next) {
@@ -12,7 +12,7 @@ module.exports = function() {
         return next()
       rentModel.findOne({ user: req.user._id, state: 0 }).exec((err, res) => {
         if (res) {
-          var item = res.items.find(
+          const item = res.items.find(
             item => item._id === parseInt(req.body.itemId)
           )
           if (item) item.amount += parseInt(req.body.amount)
