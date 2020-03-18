@@ -1,8 +1,8 @@
-var itemModel = require('./item')
-var userModel = require('./user')
-var rentModel = require('./rent')
+const itemModel = require('./item')
+const userModel = require('./user')
+const rentModel = require('./rent')
 
-var objectRepository = {
+const objectRepository = {
   itemModel: itemModel,
   userModel: userModel,
   rentModel: rentModel

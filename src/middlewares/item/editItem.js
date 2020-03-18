@@ -1,8 +1,8 @@
 module.exports = function() {
   return function(req, res, next) {
-    var count = req.body.count
-    var stock = req.body.stock
-    var name = req.body.name
+    const count = req.body.count
+    const stock = req.body.stock
+    const name = req.body.name
 
     if (!req.item) return next()
 
@@ -10,7 +10,7 @@ module.exports = function() {
     req.item.name = name
     req.item.stock = parseInt(stock, 10)
 
-    req.item.save((err) => {
+    req.item.save(err => {
       if (err) return next(err)
       return next()
     })

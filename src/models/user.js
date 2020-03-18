@@ -1,11 +1,11 @@
 // TODO
 /* eslint-disable no-undef */
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-var Schema = mongoose.Schema,
+const Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId
 
-var UserScema = new Schema(
+const UserScema = new Schema(
   {
     _id: {
       type: ObjectId,
@@ -32,7 +32,7 @@ UserScema.statics.findByAuthSchOrCreate = function(authSchUser, callback) {
     },
     (err, user) => {
       if (err) return callback(err)
-      var isAdmin = authSchUser.eduPersonEntitlement.some(obj => {
+      const isAdmin = authSchUser.eduPersonEntitlement.some(obj => {
         //106-Kir-Dev, 164-DSK
         return (obj.id === 106 || obj.id === 164) && obj.status.length > 0
       })
@@ -43,7 +43,7 @@ UserScema.statics.findByAuthSchOrCreate = function(authSchUser, callback) {
         }
         return callback(null, user)
       } else {
-        var newUser = new User()
+        const newUser = new User()
         newUser.name = authSchUser.displayName
         newUser.authSchId = authSchUser.internal_id
         newUser.email = authSchUser.mail

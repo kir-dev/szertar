@@ -1,13 +1,13 @@
-var express = require('express')
-var router = express.Router()
-var getCart = require('../middlewares/item/getCart')
-var getAllRents = require('../middlewares/item/getAllRents')
-var getAllItems = require('../middlewares/item/getAllItems')
-var requireAuth = require('../middlewares/user/requireAuthentication')
-var confirmCart = require('../middlewares/user/confirmCart')
-var returnRent = require('../middlewares/user/returnRent')
-var sendMail = require('../middlewares/generic/sendMail')
-var deleteCartItem = require('../middlewares/item/deleteCartItem')
+const express = require('express')
+const router = express.Router()
+const getCart = require('../middlewares/item/getCart')
+const getAllRents = require('../middlewares/item/getAllRents')
+const getAllItems = require('../middlewares/item/getAllItems')
+const requireAuth = require('../middlewares/user/requireAuthentication')
+const confirmCart = require('../middlewares/user/confirmCart')
+const returnRent = require('../middlewares/user/returnRent')
+const sendMail = require('../middlewares/generic/sendMail')
+const deleteCartItem = require('../middlewares/item/deleteCartItem')
 
 router.get('/rents', requireAuth, getAllItems(), getAllRents(), (req, res) => {
   res.render('pages/rents', {

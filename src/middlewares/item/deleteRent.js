@@ -1,5 +1,5 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
 
 module.exports = function() {
   return function(req, res, next) {

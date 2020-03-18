@@ -1,7 +1,7 @@
-var objectRepository = require('../../models/objectRepository')
-var rentModel = objectRepository.rentModel
-var userModel = objectRepository.userModel
-var webpush = require('web-push')
+const objectRepository = require('../../models/objectRepository')
+const rentModel = objectRepository.rentModel
+const userModel = objectRepository.userModel
+const webpush = require('web-push')
 
 module.exports = function() {
   return function(req, res, next) {

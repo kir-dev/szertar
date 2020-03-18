@@ -1,16 +1,16 @@
 require('dotenv').config()
-var config = require('./config/config')
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
-var bodyparser = require('body-parser')
-var session = require('express-session')
-var MongoDBStore = require('connect-mongodb-session')(session)
-var passport = require('passport')
-var requestlogger = require('./middlewares/generic/logRequest')
-var webpush = require('web-push')
+const config = require('./config/config')
+const createError = require('http-errors')
+const express = require('express')
+const path = require('path')
+const cookieParser = require('cookie-parser')
+const logger = require('morgan')
+const bodyparser = require('body-parser')
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
+const passport = require('passport')
+const requestlogger = require('./middlewares/generic/logRequest')
+const webpush = require('web-push')
 
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY
@@ -21,13 +21,13 @@ webpush.setVapidDetails(
 )
 
 // route require
-var main = require('./routes/main')
-var auth = require('./routes/auth')
-var item = require('./routes/item')
-var user = require('./routes/user')
-var admin = require('./routes/admin')
+const main = require('./routes/main')
+const auth = require('./routes/auth')
+const item = require('./routes/item')
+const user = require('./routes/user')
+const admin = require('./routes/admin')
 
-var app = express()
+const app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, '..', 'views'))
@@ -45,7 +45,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
 // passport
-var store = new MongoDBStore(
+const store = new MongoDBStore(
   {
     uri: config.mongo.path,
     databaseName: 'szertar',
@@ -86,8 +86,8 @@ app.use((req, res, next) => {
   return next()
 })
 
-var sendMail = require('./middlewares/generic/sendMail')
-var requireAdmin = require('./middlewares/user/requireAdmin')
+const sendMail = require('./middlewares/generic/sendMail')
+const requireAdmin = require('./middlewares/user/requireAdmin')
 app.get(
   '/test',
   requireAdmin(),
@@ -120,7 +120,7 @@ app.post('/subscribe', (req, res) => {
 })
 
 app.post('/unsubscribe', (req, res) => {
-  var userModel = objectRepository.userModel
+  const userModel = objectRepository.userModel
   const subscription = req.body
   userModel.findByIdAndUpdate(
     req.user._id,
@@ -130,8 +130,8 @@ app.post('/unsubscribe', (req, res) => {
   res.status(201).json({})
 })
 
-var objectRepository = require('./models/objectRepository')
-var rentModel = objectRepository.rentModel
+const objectRepository = require('./models/objectRepository')
+const rentModel = objectRepository.rentModel
 app.use((req, res, next) => {
   res.locals.user = req.user || null
   res.locals.url = req.url

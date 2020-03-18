@@ -1,14 +1,14 @@
-var nodeMailer = require('nodemailer')
-var config = require('../../config/config')
+const nodeMailer = require('nodemailer')
+const config = require('../../config/config')
 
 module.exports = function(txt, html, subj = '') {
   return function(req, res, next) {
-    var transporter = nodeMailer.createTransport({
+    const transporter = nodeMailer.createTransport({
       port: config.emailPort,
       ignoreTLS: true,
       host: config.emailHost
     })
-    var mailOptions = {
+    const mailOptions = {
       from: '"SCH Szertár" <noreply@example.com>', // sender address
       to: 'Test <noreply@example.com>', // list of receivers
       subject: '[SCH Szertár] ' + subj, // Subject line

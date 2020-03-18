@@ -1,8 +1,8 @@
-var objectRepository = require('../../models/objectRepository')
-var userModel = objectRepository.userModel
+const objectRepository = require('../../models/objectRepository')
+const userModel = objectRepository.userModel
 
-var listUser = function(){
-  return function(req, res, next){
+const listUser = function() {
+  return function(req, res, next) {
     userModel.find({}, (err, users) => {
       if (err) throw err
       req.users = users
